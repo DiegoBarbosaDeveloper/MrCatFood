@@ -235,7 +235,19 @@ Estas reglas no fueron pedidas explícitamente, pero son necesarias para que los
 | Horario de recepción | Franja horaria en la que se aceptan pedidos |
 | Estado del pedido | Situación actual del pedido dentro de su ciclo de vida |
 
-## 9. Trazabilidad de esta tarea
+## 9. Estado de verificación
+
+| Comprobación | Resultado |
+|---|---|
+| Documento completo (RF-01…RF-10, RNF-01…RNF-05) | Correcto |
+| Caracteres no corruptos | Correcto |
+| `./gradlew build` | **En rojo, y no por esta tarea** |
+
+**Sobre el build en rojo.** El fallo ocurre en `MrCatFoodApplicationTests.contextLoads()` con la excepción `DataSourceBeanCreationException`: el andamiaje generado por Spring Initializr no trae configuración de datasource en `application.yaml`, por lo que Spring no puede construir el `DataSource`. Se reprodujo el mismo fallo en `main` sin este documento, así que es una condición previa del proyecto.
+
+La configuración del datasource y del esquema corresponde a la tarea **M2.2** (`chore/registro-clientes: crea-migraciones-flyway-y-configura-datasource`). Esta tarea M1.1 es exclusivamente documental y no modifica código ni configuración, por lo que no introduce regresión. El proyecto recuperará el build en verde al cerrar M2.2.
+
+## 10. Trazabilidad de esta tarea
 
 | Elemento | Ubicación |
 |---|---|
