@@ -18,7 +18,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 
 | # | Módulo | Requisitos | Tareas | Progreso | Estado |
 |---|---|---|---|---|---|
-| M1 | Levantamiento y análisis de requisitos | Todos | 6 | 5/6 | ◐ En proceso |
+| M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ☐ No hecho |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 0/3 | ☐ No hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 0/7 | ☐ No hecho |
@@ -26,11 +26,11 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **5/57 (9 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **6/57 (11 %)** | ◐ En proceso |
 
-**Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4 con PR abierto hacia `dev`.
+**Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
-**En proceso ahora:** M1.6 Plan de la aplicación móvil.
+**En proceso ahora:** M2.1 Andamiaje (dependencias, Spotless, `.editorconfig`). El módulo M1 queda cerrado cuando sus PR se fusionen en `dev`.
 
 **Reglas del tablero**
 
@@ -252,7 +252,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 1 — Levantamiento y análisis de requisitos
 
-**Estado:** ◐ En proceso · **Requisitos:** todos · **Depende de:** nada
+**Estado:** ☑ Hecho · **Requisitos:** todos · **Depende de:** nada
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
@@ -261,7 +261,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M1.3 | Modelar casos de uso y entidades | Must | `docs/casos-de-uso.md` y `docs/modelo-datos.md` | ☑ Hecho |
 | M1.4 | Priorizar el backlog con MoSCoW | Must | Este tablero con prioridad por tarea | ☑ Hecho |
 | M1.5 | Redactar el plan técnico del backend | Must | `docs/plan.md` con arquitectura, endpoints, seguridad y pruebas | ☑ Hecho |
-| M1.6 | Redactar el plan de la aplicación móvil | Must | `docs/plan-frontend.md` con stack, navegación, pantallas y estado | ☐ No hecho |
+| M1.6 | Redactar el plan de la aplicación móvil | Must | `docs/plan-frontend.md` con stack, navegación, pantallas y estado | ☑ Hecho |
 
 **Ready:** alcance del módulo acordado; fuentes de información listadas.
 **Done:** documentos en `docs/`; IDs estables usados literalmente en el resto de módulos; cada requisito tiene al menos una tarea en el backlog; los planes técnico y móvil describen la implementación de M2–M8.
