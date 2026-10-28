@@ -54,7 +54,6 @@ erDiagram
         BIGSERIAL id PK
         BIGINT    producto_id FK
         VARCHAR   nombre
-        NUMERIC   precio_adicional "12,2"
     }
 
     PEDIDO {
@@ -128,9 +127,8 @@ Los campos marcados como `copia` son los que sostienen el requisito RNF-04; ver 
 | `id` | BIGSERIAL | PK | Identificador |
 | `producto_id` | BIGINT | FK → `producto(id)`, ON DELETE CASCADE | Producto al que pertenece |
 | `nombre` | VARCHAR(120) | NOT NULL | Ingrediente del sándwich |
-| `precio_adicional` | NUMERIC(12,2) | NOT NULL, default 0 | Sobrecosto opcional del ingrediente |
 
-Relación N:N entre producto e ingrediente resuelta como tabla intermedia. Permite que un mismo ingrediente aparezca en varios sándwiches.
+Relación **1:N** con `producto`: cada producto declara sus propios ingredientes como una lista de nombres. No existe un catálogo central de ingredientes en esta versión, por lo que el mismo nombre puede repetirse en productos distintos sin compartir identidad. El sobrecosto por ingrediente quedó fuera de alcance y no se modela.
 
 ### 3.4 `pedido`
 
@@ -191,19 +189,21 @@ Se decidió que el cliente escriba libremente sus datos de ubicación. El modelo
 
 ```
 PENDIENTE ─────► CONFIRMADO ─────► EN_PREPARACION ─────► ENTREGADO
-     │                │                    │                   │
-     └────────────────┴────────────────────┴───────────────────┴────► CANCELADO
+     │                │                    │
+     └────────────────┴────────────────────┴────► CANCELADO
 ```
+
+`ENTREGADO` es un estado final: no admite cancelación ni retroceso. La cancelación solo es válida desde `PENDIENTE`, `CONFIRMADO` o `EN_PREPARACION`.
 
 | Estado | Significado | Efecto en el inventario |
 |---|---|---|
 | `PENDIENTE` | El cliente confirmó y el negocio aún no lo vio | Ya descontado |
 | `CONFIRMADO` | El negocio confirmó la recepción | Ya descontado |
 | `EN_PREPARACION` | Se está preparando | Ya descontado |
-| `ENTREGADO` | Se entregó al cliente | Ya descontado |
-| `CANCELADO` | Se canceló por el motivo que sea | **Devuelto** (RN-04) |
+| `ENTREGADO` | Se entregó al cliente; estado final | Ya descontado |
+| `CANCELADO` | Se canceló antes de entregar | **Devuelto** (RN-04) |
 
-Las transiciones no previstas (por ejemplo, de `ENTREGADO` a `PENDIENTE`) se rechazan con error de regla de negocio.
+Las transiciones no previstas (por ejemplo, de `ENTREGADO` a `PENDIENTE` o de `ENTREGADO` a `CANCELADO`) se rechazan con error de regla de negocio.
 
 ## 6. Integridad referencial
 

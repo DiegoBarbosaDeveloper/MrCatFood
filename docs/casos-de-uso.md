@@ -26,55 +26,55 @@ flowchart TB
         CU01["CU-01 Registrarse"]
         CU02["CU-02 Iniciar sesion"]
         CU04["CU-04 Registrar ubicacion"]
-        CU06["CU-06 Consultar catalogo"]
-        CU07["CU-07 Ver detalle de producto"]
-        CU08["CU-08 Armar pedido"]
-        CU09["CU-09 Elegir hora de entrega"]
-        CU10["CU-10 Revisar pedido"]
-        CU11["CU-11 Confirmar pedido"]
-        CU12["CU-12 Generar enlace WhatsApp"]
-        CU13["CU-13 Consultar mis pedidos"]
+        CU05["CU-05 Consultar catalogo"]
+        CU06["CU-06 Ver detalle de producto"]
+        CU07["CU-07 Armar pedido"]
+        CU08["CU-08 Elegir hora de entrega"]
+        CU09["CU-09 Revisar pedido"]
+        CU10["CU-10 Confirmar pedido"]
+        CU11["CU-11 Generar enlace WhatsApp"]
+        CU12["CU-12 Consultar mis pedidos"]
     end
 
     subgraph ADMIN["Administradora"]
         CU03["CU-03 Acceder como administradora"]
-        CU15["CU-15 Administrar productos"]
-        CU16["CU-16 Cambiar estado de pedido"]
-        CU17["CU-17 Consultar todos los pedidos"]
+        CU14["CU-14 Administrar productos"]
+        CU15["CU-15 Cambiar estado de pedido"]
+        CU16["CU-16 Consultar todos los pedidos"]
     end
 
     subgraph SISTEMA["Sistema"]
-        CU14["CU-14 Descontar inventario"]
-        CU15B["CU-15 Registrar pedido con copia de datos"]
-        CU18["CU-18 Validar horario de recepcion"]
+        CU13["CU-13 Descontar inventario"]
+        CU17["CU-17 Validar horario de recepcion"]
+        CU18["CU-18 Registrar pedido con copia de datos"]
     end
 
     CU01 --> CU02
     CU02 --> CU04
-    CU04 --> CU06
+    CU04 --> CU05
+    CU05 --> CU06
     CU06 --> CU07
     CU07 --> CU08
     CU08 --> CU09
     CU09 --> CU10
     CU10 --> CU11
-    CU11 --> CU12
-    CU11 --> CU13
-    CU13 --> CU06
+    CU10 --> CU12
+    CU12 --> CU05
 
-    CU03 --> CU15
-    CU03 --> CU17
-    CU17 --> CU16
-    CU16 --> CU17
+    CU03 --> CU14
+    CU03 --> CU16
+    CU16 --> CU15
+    CU15 --> CU16
 
-    CU11 ==>|"«include»"| CU14
-    CU11 ==>|"«include»"| CU15B
-    CU11 ==>|"«include»"| CU18
-    CU16 ==>|"«include»"| CU14
+    CU10 ==>|"«include»"| CU13
+    CU10 ==>|"«include»"| CU18
+    CU10 ==>|"«include»"| CU17
+    CU15 ==>|"«include»"| CU13
 
-    CU12 --> WA["WhatsApp"]
-    CU14 --> BD[("Base de datos")]
-    CU15B --> BD
-    CU15 --> BD
+    CU11 --> WA["WhatsApp"]
+    CU13 --> BD[("Base de datos")]
+    CU18 --> BD
+    CU14 --> BD
 
     style CLIENTE fill:#e8f4ea,stroke:#4a7c4f
     style ADMIN fill:#fdf1e0,stroke:#b5762b
@@ -142,7 +142,7 @@ flowchart TB
 
 **Postcondición:** la ubicación queda disponible para el pedido.
 
-### CU-06 — Consultar catálogo
+### CU-05 — Consultar catálogo
 **Actor:** Cliente · **Requisito:** RF-03, RF-04, RF-05 · **Precondición:** ninguna.
 
 **Escenario principal**
@@ -155,7 +155,7 @@ flowchart TB
 
 **Postcondición:** ninguna; es una consulta de solo lectura.
 
-### CU-07 — Ver detalle de producto
+### CU-06 — Ver detalle de producto
 **Actor:** Cliente · **Requisito:** RF-04 · **Precondición:** el producto está activo.
 
 **Escenario principal**
@@ -165,7 +165,7 @@ flowchart TB
 **Escenarios alternativos**
 - **A1.** El producto no existe o está inactivo → el sistema responde que no existe.
 
-### CU-08 — Armar pedido
+### CU-07 — Armar pedido
 **Actor:** Cliente · **Requisito:** RF-06 · **Precondición:** sesión iniciada y productos disponibles.
 
 **Escenario principal**
@@ -178,7 +178,7 @@ flowchart TB
 
 **Postcondición:** existe un pedido en borrador en el cliente, aún no registrado en la base.
 
-### CU-09 — Elegir hora de entrega
+### CU-08 — Elegir hora de entrega
 **Actor:** Cliente · **Requisito:** RF-07, RNF-03 · **Precondición:** hay un pedido en borrador.
 
 **Escenario principal**
@@ -192,7 +192,7 @@ flowchart TB
 - **A1.** La fecha ya pasó → el sistema la rechaza.
 - **A2.** La hora está fuera de la ventana → el sistema la rechaza indicando el horario válido.
 
-### CU-10 — Revisar pedido
+### CU-09 — Revisar pedido
 **Actor:** Cliente · **Requisito:** RF-08 · **Precondición:** hay un pedido en borrador completo.
 
 **Escenario principal**
@@ -202,24 +202,24 @@ flowchart TB
 
 **Postcondición:** nada se persiste. Este caso de uso existe para que el cliente pueda corregir antes de confirmar.
 
-### CU-11 — Confirmar pedido
+### CU-10 — Confirmar pedido
 **Actor:** Cliente · **Requisito:** RF-08 · **Precondición:** el pedido fue revisado.
 
 **Escenario principal**
 1. El cliente confirma el pedido.
 2. El sistema verifica que está dentro del horario de recepción.
-3. El sistema inicia una transacción y descuenta el inventario de cada producto. *(«include» de CU-14)*
+3. El sistema inicia una transacción y descuenta el inventario de cada producto. *(«include» de CU-13)*
 4. El sistema genera un código de pedido.
-5. El sistema registra el pedido con copia de los datos del cliente y de los precios. *(«include» de CU-15)*
+5. El sistema registra el pedido con copia de los datos del cliente y de los precios. *(«include» de CU-18)*
 6. El sistema responde con el pedido creado.
 
 **Escenarios alternativos**
 - **A1.** Está fuera del horario de recepción → el sistema rechaza y muestra el horario válido.
-- **A2.** El inventario no alcanza → el sistema informa la cantidad disponible. *(«extend» de CU-14)*
+- **A2.** El inventario no alcanza → el sistema informa la cantidad disponible. *(«extend» de CU-13)*
 
 **Postcondición:** el pedido queda registrado en estado pendiente y el inventario está descontado.
 
-### CU-12 — Generar enlace de WhatsApp
+### CU-11 — Generar enlace de WhatsApp
 **Actor:** Cliente · **Requisito:** RF-09 · **Precondición:** el pedido está confirmado.
 
 **Escenario principal**
@@ -233,7 +233,7 @@ flowchart TB
 
 **Postcondición:** ninguna; el envío lo realiza el cliente desde su aplicación de WhatsApp.
 
-### CU-13 — Consultar mis pedidos
+### CU-12 — Consultar mis pedidos
 **Actor:** Cliente · **Requisito:** RF-10 · **Precondición:** el cliente tiene sesión iniciada.
 
 **Escenario principal**
@@ -247,7 +247,7 @@ flowchart TB
 
 ## 4. Casos de uso de la administradora
 
-### CU-15 — Administrar productos
+### CU-14 — Administrar productos
 **Actor:** Administradora · **Requisito:** RF-05, RNF-05 · **Precondición:** sesión con rol administrativo.
 
 **Escenario principal**
@@ -264,7 +264,7 @@ flowchart TB
 
 **Postcondición:** el catálogo refleja los cambios. Los pedidos ya registrados no se alteran.
 
-### CU-16 — Cambiar estado de pedido
+### CU-15 — Cambiar estado de pedido
 **Actor:** Administradora · **Requisito:** RF-10 · **Precondición:** sesión con rol administrativo.
 
 **Escenario principal**
@@ -275,11 +275,12 @@ flowchart TB
 
 **Escenarios alternativos**
 - **A1.** La transición no está permitida → el sistema la rechaza.
-- **A2.** La administradora cancela el pedido → el sistema devuelve el inventario de sus productos. *(«include» de CU-14 invertido)*
+- **A2.** La administradora cancela el pedido antes de entregarlo → el sistema devuelve el inventario de sus productos. *(«include» de CU-13 invertido)*
+- **A3.** El pedido ya está `ENTREGADO` → el sistema no permite cancelarlo.
 
-**Postcondición:** el pedido queda en el estado indicado y el cliente lo ve reflejado.
+**Postcondición:** el pedido queda en el estado indicado y el cliente lo ve reflejado. `ENTREGADO` es un estado final: solo se cancela un pedido que aún no se ha entregado.
 
-### CU-17 — Consultar todos los pedidos
+### CU-16 — Consultar todos los pedidos
 **Actor:** Administradora · **Requisito:** RF-10 · **Precondición:** sesión con rol administrativo.
 
 **Escenario principal**
@@ -323,11 +324,11 @@ Cliente          Aplicación        API           Base de datos     WhatsApp
 
 | Regla | Casos de uso que la aplican |
 |---|---|
-| RN-01 El inventario no puede quedar negativo | CU-11, CU-14, CU-15, CU-16 |
-| RN-02 No se aceptan pedidos fuera del horario | CU-11 |
-| RN-03 La fecha de entrega debe ser futura y dentro de la ventana | CU-09, CU-11 |
-| RN-04 Cancelar un pedido devuelve inventario | CU-16 |
-| RN-05 Los estados avanzan por transiciones permitidas | CU-16 |
+| RN-01 El inventario no puede quedar negativo | CU-10, CU-13, CU-14, CU-15 |
+| RN-02 No se aceptan pedidos fuera del horario | CU-10 |
+| RN-03 La fecha de entrega debe ser futura y dentro de la ventana | CU-08, CU-10 |
+| RN-04 Cancelar un pedido devuelve inventario | CU-15 |
+| RN-05 Los estados avanzan por transiciones permitidas | CU-15 |
 | RN-06 El correo se compara sin distinguir mayúsculas | CU-01, CU-02 |
 
 ## 7. Trazabilidad de esta tarea

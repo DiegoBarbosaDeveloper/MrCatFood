@@ -18,7 +18,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 
 | # | Módulo | Requisitos | Tareas | Progreso | Estado |
 |---|---|---|---|---|---|
-| M1 | Levantamiento y análisis de requisitos | Todos | 4 | 3/4 | ◐ En proceso |
+| M1 | Levantamiento y análisis de requisitos | Todos | 6 | 4/6 | ◐ En proceso |
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ☐ No hecho |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 0/3 | ☐ No hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 0/7 | ☐ No hecho |
@@ -26,11 +26,11 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **55** | **3/55 (5 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **4/57 (7 %)** | ◐ En proceso |
 
-**Cerrado en este ciclo:** M1.1 Especificación de requisitos · M1.2 Historias de usuario y criterios de aceptación · M1.3 Casos de uso y modelo de datos.
+**Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4 con PR abierto hacia `dev`.
 
-**En proceso ahora:** M1.4 Priorización del backlog con MoSCoW (esta misma tarea).
+**En proceso ahora:** M1.5 Plan técnico del backend.
 
 **Reglas del tablero**
 
@@ -112,7 +112,7 @@ El nombre de la rama es exactamente el de la tarea, para que cualquier rama se p
 5. El PR se fusiona con **squash**.
 6. `dev` se fusiona en `main` al cerrar cada módulo, con revisión.
 
-Si dos tareas de documentación dependen una de otra, la segunda se apila sobre la primera (`M1.3` nace de `M1.2`) y se re-apila sobre `dev` cuando la anterior entre. Es el caso de este ciclo: M1.1, M1.2 y M1.3 se apilaron y entraron a `main` mediante los PR #1 y #2.
+Si dos tareas de documentación dependen una de otra, la segunda se apila sobre la primera (`M1.3` nace de `M1.2`) y se re-apila sobre `dev` cuando la anterior entre. Es el caso de este ciclo: M1.1, M1.2 y M1.3 entraron a `main` mediante los PR #1 y #2, y M1.4, M1.5 y M1.6 se apilan sobre `dev` en ese orden.
 
 ## 1.4 Formateador: Spotless
 
@@ -259,10 +259,12 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M1.1 | Especificar requisitos funcionales y no funcionales | Must | `docs/especificacion-requisitos.md` con RF-01…RF-10 y RNF-01…RNF-05 | ☑ Hecho |
 | M1.2 | Redactar historias de usuario con criterios de aceptación | Must | `docs/historias-de-usuario.md`, 20 historias con Given/When/Then | ☑ Hecho |
 | M1.3 | Modelar casos de uso y entidades | Must | `docs/casos-de-uso.md` y `docs/modelo-datos.md` | ☑ Hecho |
-| M1.4 | Priorizar el backlog con MoSCoW | Must | Este tablero con prioridad por tarea | ◐ En proceso |
+| M1.4 | Priorizar el backlog con MoSCoW | Must | Este tablero con prioridad por tarea | ☑ Hecho |
+| M1.5 | Redactar el plan técnico del backend | Must | `docs/plan.md` con arquitectura, endpoints, seguridad y pruebas | ☐ No hecho |
+| M1.6 | Redactar el plan de la aplicación móvil | Must | `docs/plan-frontend.md` con stack, navegación, pantallas y estado | ☐ No hecho |
 
 **Ready:** alcance del módulo acordado; fuentes de información listadas.
-**Done:** documentos en `docs/`; IDs estables usados literalmente en el resto de módulos; cada requisito tiene al menos una tarea en el backlog.
+**Done:** documentos en `docs/`; IDs estables usados literalmente en el resto de módulos; cada requisito tiene al menos una tarea en el backlog; los planes técnico y móvil describen la implementación de M2–M8.
 
 ## Módulo 2 — Registro de clientes
 
@@ -405,7 +407,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 | Riesgo | Estado | Mitigación |
 |---|---|---|
-| `./gradlew build` en rojo por falta de datasource | **Abierto** | Se cierra en **M2.2**. Documentado en `docs/especificacion-requisitos.md` §9 |
+| `./gradlew build` en rojo: *toolchain* Java 21 ausente (solo hay JDK 25) y datasource sin configurar | **Abierto** | **M2.1** compila con `options.release = 21`; **M2.2** configura el datasource. Documentado en `docs/especificacion-requisitos.md` §9 |
 | Spring Boot 4 es muy reciente (Security 7, Jackson 3, Hibernate 7) | Abierto | No usar APIs directos de Jackson; DSL de lambda en Security |
 | springdoc 3.1.1 es la primera línea para Boot 4 | Abierto | Si falla, la API sigue funcionando: solo se pierde Swagger |
 | Testcontainers 2.0.5 cambió de coordenadas | Abierto | Plan B con H2 en modo PostgreSQL |
