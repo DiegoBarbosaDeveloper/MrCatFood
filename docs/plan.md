@@ -164,7 +164,7 @@ Formato único:
   "type": "about:blank",
   "title": "Stock insuficiente",
   "status": 409,
-  "detail": "Solo quedan 1 unidades de Sándwich de pollo",
+  "detail": "Solo queda 1 unidad de Sándwich de pollo",
   "instance": "/api/pedidos",
   "codigo": "STOCK_INSUFICIENTE",
   "campos": { "cantidad": "supera la disponibilidad" }
