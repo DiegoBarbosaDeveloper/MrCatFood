@@ -243,9 +243,12 @@ Estas reglas no fueron pedidas explícitamente, pero son necesarias para que los
 | Caracteres no corruptos | Correcto |
 | `./gradlew build` | **En rojo, y no por esta tarea** |
 
-**Sobre el build en rojo.** El fallo ocurre en `MrCatFoodApplicationTests.contextLoads()` con la excepción `DataSourceBeanCreationException`: el andamiaje generado por Spring Initializr no trae configuración de datasource en `application.yaml`, por lo que Spring no puede construir el `DataSource`. Se reprodujo el mismo fallo en `main` sin este documento, así que es una condición previa del proyecto.
+**Sobre el build en rojo.** El proyecto no compila todavía por dos causas previas, ambas ajenas a la documentación:
 
-La configuración del datasource y del esquema corresponde a la tarea **M2.2** (`chore/registro-clientes: crea-migraciones-flyway-y-configura-datasource`). Esta tarea M1.1 es exclusivamente documental y no modifica código ni configuración, por lo que no introduce regresión. El proyecto recuperará el build en verde al cerrar M2.2.
+1. `build.gradle.kts` declara un *toolchain* de Java 21 y la máquina de desarrollo solo tiene JDK 25, por lo que Gradle falla antes de compilar (`Cannot find a Java installation ... matching: {languageVersion=21}`). Se resuelve en **M2.1** compilando con `options.release = 21` sobre el JDK instalado.
+2. `application.yaml` no configura el `DataSource`, por lo que `MrCatFoodApplicationTests.contextLoads()` falla con `DataSourceBeanCreationException` una vez resuelto el punto anterior. Se resuelve en **M2.2** con las migraciones Flyway y el datasource por variables de entorno.
+
+Esta tarea M1.1 es exclusivamente documental y no modifica código ni configuración, por lo que no introduce regresión. El proyecto recuperará el build en verde al cerrar M2.1 y M2.2.
 
 ## 10. Trazabilidad de esta tarea
 
@@ -255,5 +258,5 @@ La configuración del datasource y del esquema corresponde a la tarea **M2.2** (
 | Ramas de trabajo | `M1.1`, `M1.2`, `M1.3`, `M1.4` |
 | Historias de usuario derivadas | M1.2 — `docs/historias-de-usuario.md` |
 | Diagramas derivados | M1.3 — `docs/casos-de-uso.md` y `docs/modelo-datos.md` |
-| Plan técnico | `docs/plan.md` |
-| Plan de la aplicación móvil | `docs/plan-frontend.md` |
+| Plan técnico | M1.5 — `docs/plan.md` |
+| Plan de la aplicación móvil | M1.6 — `docs/plan-frontend.md` |
