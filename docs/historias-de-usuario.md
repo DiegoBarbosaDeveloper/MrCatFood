@@ -127,7 +127,7 @@ Prioridad con MoSCoW: **Must** (obligatorio), **Should** (deseable), **Could** (
 ### HU-09 — Cambiar el precio de un sándwich
 **Requisito:** RF-05, RNF-05 · **Prioridad:** Must
 
-> **Como** ajusto el precio de un sándwich **para** que el negocio actualice sus tarifas sin esperar un despliegue.
+> **Como** administradora **quiero** ajustar el precio de un sándwich **para** que el negocio actualice sus tarifas sin esperar un despliegue.
 
 **Criterios de aceptación**
 - **Dado** que soy administradora **cuando** cambio el precio de un producto **entonces** el catálogo público muestra el nuevo valor.
@@ -231,6 +231,7 @@ Prioridad con MoSCoW: **Must** (obligatorio), **Should** (deseable), **Could** (
 **Criterios de aceptación**
 - **Dado** un pedido pendiente **cuando** lo marco como confirmado, en preparación o entregado **entonces** el estado cambia.
 - **Dado** un pedido ya entregado **cuando** intento devolverlo a pendiente **entonces** el sistema rechaza el cambio.
+- **Dado** un pedido ya entregado **cuando** intento cancelarlo **entonces** el sistema rechaza la cancelación.
 - **Dado** un pedido cancelado **cuando** consulto el inventario **entonces** las unidades del pedido vuelven a estar disponibles.
 
 ### HU-20 — Intentar usar funciones administrativas sin permiso
