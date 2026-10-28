@@ -170,7 +170,7 @@ Los esquemas Zod replican las reglas del backend para dar retroalimentación inm
 | Correo | Formato válido y obligatorio |
 | Contraseña | Mínimo 8 caracteres (HU-01) |
 | Teléfono | 7 a 15 dígitos |
-| Conjunto y apartamento | Obligatorios, sin espacios únicamente |
+| Conjunto y apartamento | Obligatorios; se rechazan si quedan vacíos o solo con espacios |
 | Cantidad | Entero mayor que cero y menor o igual al stock |
 | Fecha de entrega | Futura y dentro de la ventana publicada por `GET /api/configuracion/horario` |
 | Precio y stock (admin) | No negativos; precio mayor que cero |
