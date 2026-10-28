@@ -6,7 +6,7 @@
 | Tarea | M1.3 · Modelar casos de uso y entidades (modelo de datos) |
 | Versión | 1.0 |
 | Estado | En revisión (Pull Request) |
-| Motor de persistencia | PostgreSQL 16 · migraciones con Flyway |
+| Motor de persistencia | PostgreSQL 18 · migraciones con Flyway |
 
 ## 1. Convenciones
 
