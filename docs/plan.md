@@ -274,6 +274,8 @@ Coincide con los valores por defecto de `.env.example` (`127.0.0.1:5432/mydataba
 | `V2__crea_producto.sql` | M4.1 | `producto`, `producto_ingrediente` y datos de ejemplo |
 | `V3__crea_pedido.sql` | M5.1 | `pedido`, `detalle_pedido`, índices y checks |
 
+Flyway entra con `spring-boot-starter-flyway`: en Spring Boot 4 la autoconfiguración vive en un módulo aparte y `flyway-core` por sí solo no la activa.
+
 Reglas: nombres `V{n}__descripcion_en_snake_case.sql`; una migración por tarea que toque el esquema; nunca se edita una migración ya aplicada; `stock >= 0` y `precio >= 0` se garantizan con `CHECK` además de en el servicio.
 
 ## 13. Pruebas

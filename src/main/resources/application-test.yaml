@@ -1,0 +1,14 @@
+# Perfil de pruebas: base en memoria, sin depender de PostgreSQL ni de .env.
+# Plan B registrado en el backlog mientras M7.3 no introduzca Testcontainers.
+spring:
+  datasource:
+    url: jdbc:h2:mem:mrcatfood;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      # El esquema se genera desde las entidades; las migraciones son de PostgreSQL.
+      ddl-auto: create-drop
+  flyway:
+    enabled: false

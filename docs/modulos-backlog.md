@@ -30,7 +30,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
-**En proceso ahora:** M2.1 Andamiaje (dependencias, Spotless, `.editorconfig`), con PR abierto hacia `dev`.
+**En proceso ahora:** M2.2 Migraciones Flyway y datasource por esquema, apilada sobre M2.1.
 
 **Reglas del tablero**
 
@@ -273,7 +273,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
 | M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ◐ En proceso |
-| M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ☐ No hecho |
+| M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ◐ En proceso |
 | M2.3 | Entidad `Usuario`, roles y repositorio | Must | `Usuario` mapeada y validada contra el esquema | ☐ No hecho |
 | M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ☐ No hecho |
 | M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ☐ No hecho |
