@@ -71,7 +71,7 @@ public class Usuario {
     }
 
     /** RN-06: sin espacios en los extremos y siempre en minúsculas. */
-    static String normalizarEmail(String email) {
+    public static String normalizarEmail(String email) {
         return email == null ? null : email.trim().toLowerCase(Locale.ROOT);
     }
 
