@@ -90,6 +90,7 @@ com.diegodev.mrcatfood
 └── comun
     ├── ApiException.java             excepción de negocio con código
     ├── ManejadorGlobalErrores.java   @RestControllerAdvice → ProblemDetail
+    ├── RespuestaProblema.java        escritor de errores para filtros y handlers
     └── Paginacion.java               página, tamaño y orden comunes
 ```
 
