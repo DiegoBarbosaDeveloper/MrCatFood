@@ -99,7 +99,7 @@ Se implementa exactamente el esquema de `docs/modelo-datos.md`:
 
 | Entidad | Notas de implementación |
 |---|---|
-| `Usuario` | `email` único, normalizado a minúsculas; `passwordHash` BCrypt; `rol` como `enum` `CLIENTE`/`ADMIN`; `activo` |
+| `Usuario` | `email` único, normalizado a minúsculas; `passwordHash` BCrypt; `rol` como `enum` `CLIENTE`/`ADMIN`; `activo`; `creadoEn` con `@CreationTimestamp` para no depender del default de PostgreSQL en las pruebas con H2 |
 | `Producto` | `precio` y `stock` como `BigDecimal`/`Integer`; `@Version` para bloqueo optimista; `activo` para baja lógica |
 | `Ingrediente` | `@ManyToOne Producto`; sin catálogo central ni sobrecosto |
 | `Pedido` | Copia de `conjuntoResidencial` y `apartamento`; `fechaEntrega`, `horaEntrega`, `notas`, `subtotal`, `total`; `estado` |
