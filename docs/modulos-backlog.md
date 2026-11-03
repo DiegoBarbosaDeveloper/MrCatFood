@@ -281,7 +281,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ☐ No hecho |
 | M2.8 | Usuario autenticado actual | Must | `GET /api/auth/yo` devuelve los datos del token, nunca los de otro | ☐ No hecho |
 | M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ◐ En proceso |
-| M2.10 | Pantalla de acceso de la administradora (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ☐ No hecho |
+| M2.10 | Pantalla de acceso y registro (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ◐ En proceso |
 
 **Ready:** M1 cerrado; contrato de registro y login definido con ejemplos; regla de la cuenta admin decidida (cuenta única).
 **Done:** **prueba de escalada de privilegios**: un registro con `"rol":"ADMIN"` en el cuerpo devuelve 400 y el usuario queda `CLIENTE`; contraseña nunca en texto plano ni en el repositorio.
