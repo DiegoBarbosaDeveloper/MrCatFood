@@ -278,7 +278,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ◐ En proceso |
 | M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ◐ En proceso |
 | M2.6 | Cuenta de la administradora al arrancar | Must | Arranca dos veces sin duplicar el admin; contraseña con BCrypt | ◐ En proceso |
-| M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ☐ No hecho |
+| M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ◐ En proceso |
 | M2.8 | Usuario autenticado actual | Must | `GET /api/auth/yo` devuelve los datos del token, nunca los de otro | ☐ No hecho |
 | M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ◐ En proceso |
 | M2.10 | Pantalla de acceso de la administradora (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ☐ No hecho |
