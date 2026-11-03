@@ -30,7 +30,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
-**En proceso ahora:** M2.1 Andamiaje (dependencias, Spotless, `.editorconfig`). El módulo M1 queda cerrado cuando sus PR se fusionen en `dev`.
+**En proceso ahora:** M2.1 Andamiaje (dependencias, Spotless, `.editorconfig`), con PR abierto hacia `dev`.
 
 **Reglas del tablero**
 
@@ -272,7 +272,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ☐ No hecho |
+| M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ◐ En proceso |
 | M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ☐ No hecho |
 | M2.3 | Entidad `Usuario`, roles y repositorio | Must | `Usuario` mapeada y validada contra el esquema | ☐ No hecho |
 | M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ☐ No hecho |
@@ -407,7 +407,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 | Riesgo | Estado | Mitigación |
 |---|---|---|
-| `./gradlew build` en rojo: *toolchain* Java 21 ausente (solo hay JDK 25) y datasource sin configurar | **Abierto** | **M2.1** compila con `options.release = 21`; **M2.2** configura el datasource. Documentado en `docs/especificacion-requisitos.md` §9 |
+| ~~`./gradlew build` en rojo: *toolchain* Java 21 ausente y datasource sin configurar~~ | **Cerrado en M2.1** | `foojay-resolver` descarga el JDK 21 y el `build` queda en verde; **M2.2** conecta el datasource real. Documentado en `docs/especificacion-requisitos.md` §9 |
 | Spring Boot 4 es muy reciente (Security 7, Jackson 3, Hibernate 7) | Abierto | No usar APIs directos de Jackson; DSL de lambda en Security |
 | springdoc 3.1.1 es la primera línea para Boot 4 | Abierto | Si falla, la API sigue funcionando: solo se pierde Swagger |
 | Testcontainers 2.0.5 cambió de coordenadas | Abierto | Plan B con H2 en modo PostgreSQL |
