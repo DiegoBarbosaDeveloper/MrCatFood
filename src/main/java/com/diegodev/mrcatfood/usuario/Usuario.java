@@ -70,6 +70,12 @@ public class Usuario {
         this.rol = rol;
     }
 
+    /** Reemplaza la ubicación registrada en el perfil. */
+    public void actualizarUbicacion(String conjuntoResidencial, String apartamento) {
+        this.conjuntoResidencial = conjuntoResidencial;
+        this.apartamento = apartamento;
+    }
+
     /** RN-06: sin espacios en los extremos y siempre en minúsculas. */
     public static String normalizarEmail(String email) {
         return email == null ? null : email.trim().toLowerCase(Locale.ROOT);
