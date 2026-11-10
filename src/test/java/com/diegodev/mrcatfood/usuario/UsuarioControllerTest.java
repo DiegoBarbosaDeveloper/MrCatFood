@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.diegodev.mrcatfood.comun.CodigoError;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,68 @@ class UsuarioControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.conjuntoResidencial").value("Torres del Parque"))
                 .andExpect(jsonPath("$.apartamento").value("302"));
+    }
+
+    @Test
+    void limpiaEspaciosExterioresAntesDeGuardar() throws Exception {
+        String token = registrarCliente("espacios-ubicacion@example.com");
+
+        mvc.perform(
+                        put("/api/usuarios/yo/ubicacion")
+                                .header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(
+                                        "{\"conjuntoResidencial\":\"  Los Pinos  \",\"apartamento\":\"  4B  \"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.conjuntoResidencial").value("Los Pinos"))
+                .andExpect(jsonPath("$.apartamento").value("4B"));
+    }
+
+    @Test
+    void rechazaCamposVaciosOSoloConEspacios() throws Exception {
+        String token = registrarCliente("vacios-ubicacion@example.com");
+
+        mvc.perform(
+                        put("/api/usuarios/yo/ubicacion")
+                                .header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"conjuntoResidencial\":\"   \",\"apartamento\":\"\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.codigo").value(CodigoError.DATOS_INVALIDOS.name()))
+                .andExpect(jsonPath("$.campos.conjuntoResidencial").exists())
+                .andExpect(jsonPath("$.campos.apartamento").exists());
+    }
+
+    @Test
+    void rechazaCamposFaltantes() throws Exception {
+        String token = registrarCliente("faltantes-ubicacion@example.com");
+
+        mvc.perform(
+                        put("/api/usuarios/yo/ubicacion")
+                                .header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.codigo").value(CodigoError.DATOS_INVALIDOS.name()))
+                .andExpect(jsonPath("$.campos.conjuntoResidencial").exists())
+                .andExpect(jsonPath("$.campos.apartamento").exists());
+    }
+
+    @Test
+    void rechazaCamposQueSuperanLaLongitudPermitida() throws Exception {
+        String token = registrarCliente("longitud-ubicacion@example.com");
+        String cuerpo =
+                MAPPER.writeValueAsString(new UbicacionRequest("C".repeat(121), "A".repeat(61)));
+
+        mvc.perform(
+                        put("/api/usuarios/yo/ubicacion")
+                                .header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(cuerpo))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.codigo").value(CodigoError.DATOS_INVALIDOS.name()))
+                .andExpect(jsonPath("$.campos.conjuntoResidencial").exists())
+                .andExpect(jsonPath("$.campos.apartamento").exists());
     }
 
     @Test

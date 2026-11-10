@@ -70,10 +70,10 @@ public class Usuario {
         this.rol = rol;
     }
 
-    /** Reemplaza la ubicación registrada en el perfil. */
+    /** Reemplaza la ubicación registrada y la deja lista para copiarla a un pedido. */
     public void actualizarUbicacion(String conjuntoResidencial, String apartamento) {
-        this.conjuntoResidencial = conjuntoResidencial;
-        this.apartamento = apartamento;
+        this.conjuntoResidencial = conjuntoResidencial.trim();
+        this.apartamento = apartamento.trim();
     }
 
     /** RN-06: sin espacios en los extremos y siempre en minúsculas. */
