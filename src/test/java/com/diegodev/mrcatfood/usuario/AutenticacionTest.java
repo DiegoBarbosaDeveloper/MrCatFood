@@ -1,5 +1,6 @@
 package com.diegodev.mrcatfood.usuario;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -141,5 +142,27 @@ class AutenticacionTest {
 
         org.assertj.core.api.Assertions.assertThatThrownBy(() -> jwt.validar(token))
                 .isInstanceOf(TokenInvalidoException.class);
+    }
+
+    @Test
+    void yoDevuelveLosDatosDelTokenSinElHash() throws Exception {
+        String cuerpo =
+                "{\"nombre\":\"Yo\",\"email\":\"yo@example.com\",\"telefono\":\"3001234567\",\"password\":\"clave1234\"}";
+        MvcResult registro =
+                mvc.perform(
+                                post("/api/auth/registro")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(cuerpo))
+                        .andExpect(status().isCreated())
+                        .andReturn();
+        String token =
+                MAPPER.readTree(registro.getResponse().getContentAsString()).get("token").asText();
+
+        mvc.perform(get("/api/auth/yo").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("yo@example.com"))
+                .andExpect(jsonPath("$.nombre").value("Yo"))
+                .andExpect(jsonPath("$.passwordHash").doesNotExist())
+                .andExpect(jsonPath("$.password_hash").doesNotExist());
     }
 }
