@@ -19,7 +19,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | # | Módulo | Requisitos | Tareas | Progreso | Estado |
 |---|---|---|---|---|---|
 | M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
-| M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ☐ No hecho |
+| M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 0/3 | ☐ No hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 0/7 | ☐ No hecho |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 0/11 | ☐ No hecho |
@@ -30,7 +30,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
-**En proceso ahora:** M2.2 Migraciones Flyway y datasource por esquema, apilada sobre M2.1.
+**En proceso ahora:** M2.10 Andamiaje de la app móvil completado; M2 queda cerrado cuando sus PR se fusionen en `dev`.
 
 **Reglas del tablero**
 
@@ -275,13 +275,13 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ◐ En proceso |
 | M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ◐ En proceso |
 | M2.3 | Entidad `Usuario`, roles y repositorio | Must | `Usuario` mapeada y validada contra el esquema | ◐ En proceso |
-| M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ☐ No hecho |
-| M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ☐ No hecho |
-| M2.6 | Cuenta de la administradora al arrancar | Must | Arranca dos veces sin duplicar el admin; contraseña con BCrypt | ☐ No hecho |
+| M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ◐ En proceso |
+| M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ◐ En proceso |
+| M2.6 | Cuenta de la administradora al arrancar | Must | Arranca dos veces sin duplicar el admin; contraseña con BCrypt | ◐ En proceso |
 | M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ☐ No hecho |
 | M2.8 | Usuario autenticado actual | Must | `GET /api/auth/yo` devuelve los datos del token, nunca los de otro | ☐ No hecho |
-| M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ☐ No hecho |
-| M2.10 | Pantalla de acceso de la administradora (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ☐ No hecho |
+| M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ◐ En proceso |
+| M2.10 | Pantalla de acceso y registro (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ◐ En proceso |
 
 **Ready:** M1 cerrado; contrato de registro y login definido con ejemplos; regla de la cuenta admin decidida (cuenta única).
 **Done:** **prueba de escalada de privilegios**: un registro con `"rol":"ADMIN"` en el cuerpo devuelve 400 y el usuario queda `CLIENTE`; contraseña nunca en texto plano ni en el repositorio.

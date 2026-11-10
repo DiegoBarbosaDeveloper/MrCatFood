@@ -90,6 +90,7 @@ com.diegodev.mrcatfood
 └── comun
     ├── ApiException.java             excepción de negocio con código
     ├── ManejadorGlobalErrores.java   @RestControllerAdvice → ProblemDetail
+    ├── RespuestaProblema.java        escritor de errores para filtros y handlers
     └── Paginacion.java               página, tamaño y orden comunes
 ```
 
@@ -103,7 +104,7 @@ Se implementa exactamente el esquema de `docs/modelo-datos.md`:
 | `Producto` | `precio` y `stock` como `BigDecimal`/`Integer`; `@Version` para bloqueo optimista; `activo` para baja lógica |
 | `Ingrediente` | `@ManyToOne Producto`; sin catálogo central ni sobrecosto |
 | `Pedido` | Copia de `conjuntoResidencial` y `apartamento`; `fechaEntrega`, `horaEntrega`, `notas`, `subtotal`, `total`; `estado` |
-| `DetallePedido` | Copia de `nombreProducto` y `precioUnitario`; `producto` con `ON DELETE SET NULL`; `cantidad > 0` |
+| `TokenRevocado` | Solo `jti` y `expiraEn`; purga programada de vencidos (HU-02) |
 
 Convenciones:
 
