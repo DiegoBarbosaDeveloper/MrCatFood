@@ -1,7 +1,5 @@
 package com.diegodev.mrcatfood.usuario;
 
-import com.diegodev.mrcatfood.comun.ApiException;
-import com.diegodev.mrcatfood.comun.CodigoError;
 import com.diegodev.mrcatfood.seguridad.ServicioJwt;
 import com.diegodev.mrcatfood.seguridad.UsuarioAutenticado;
 import jakarta.validation.Valid;
@@ -20,13 +18,10 @@ public class AutenticacionController {
 
     private final UsuarioService servicio;
     private final ServicioJwt jwt;
-    private final UsuarioRepository usuarios;
 
-    public AutenticacionController(
-            UsuarioService servicio, ServicioJwt jwt, UsuarioRepository usuarios) {
+    public AutenticacionController(UsuarioService servicio, ServicioJwt jwt) {
         this.servicio = servicio;
         this.jwt = jwt;
-        this.usuarios = usuarios;
     }
 
     @PostMapping("/registro")
@@ -51,13 +46,6 @@ public class AutenticacionController {
     @GetMapping("/yo")
     public ResponseEntity<UsuarioResponse> yo(
             @AuthenticationPrincipal UsuarioAutenticado principal) {
-        var usuario =
-                usuarios.findById(principal.id())
-                        .orElseThrow(
-                                () ->
-                                        new ApiException(
-                                                CodigoError.RECURSO_NO_ENCONTRADO,
-                                                "Usuario no encontrado"));
-        return ResponseEntity.ok(UsuarioResponse.de(usuario));
+        return ResponseEntity.ok(servicio.buscarUsuarioActual(principal.id()));
     }
 }

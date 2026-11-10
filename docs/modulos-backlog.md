@@ -20,7 +20,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 |---|---|---|---|---|---|
 | M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
-| M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 0/3 | ☐ No hecho |
+| M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 0/3 | ◐ En proceso |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 0/7 | ☐ No hecho |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 0/11 | ☐ No hecho |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
@@ -288,11 +288,11 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 3 — Ubicación: conjunto y apartamento
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-02 · **Depende de:** M2
+**Estado:** ◐ En proceso · **Requisitos:** RF-02 · **Depende de:** M2
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M3.1 | Endpoints de perfil y de ubicación | Must | `PUT /api/usuarios/yo/ubicacion` guarda y devuelve los datos | ☐ No hecho |
+| M3.1 | Endpoints de perfil y de ubicación | Must | `PUT /api/usuarios/yo/ubicacion` guarda y devuelve los datos | ◐ En proceso |
 | M3.2 | Validación y copia de los datos | Must | Campos vacíos → 400; el pedido guarda copia de los valores del momento | ☐ No hecho |
 | M3.3 | Pantalla Mi ubicación (móvil) | Must | El cliente guarda y vuelve a ver conjunto y apartamento | ☐ No hecho |
 

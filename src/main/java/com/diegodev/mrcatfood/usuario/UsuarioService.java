@@ -57,4 +57,25 @@ public class UsuarioService {
         return jwt.emitir(
                 new UsuarioAutenticado(usuario.getId(), usuario.getEmail(), usuario.getRol()));
     }
+
+    @Transactional(readOnly = true)
+    public UsuarioResponse buscarUsuarioActual(Long usuarioId) {
+        return UsuarioResponse.de(buscarUsuarioPorId(usuarioId));
+    }
+
+    @Transactional
+    public UsuarioResponse actualizarUbicacion(Long usuarioId, UbicacionRequest solicitud) {
+        Usuario usuario = buscarUsuarioPorId(usuarioId);
+        usuario.actualizarUbicacion(solicitud.conjuntoResidencial(), solicitud.apartamento());
+        return UsuarioResponse.de(usuario);
+    }
+
+    private Usuario buscarUsuarioPorId(Long usuarioId) {
+        return usuarios.findById(usuarioId)
+                .orElseThrow(
+                        () ->
+                                new ApiException(
+                                        CodigoError.RECURSO_NO_ENCONTRADO,
+                                        "Usuario no encontrado"));
+    }
 }
