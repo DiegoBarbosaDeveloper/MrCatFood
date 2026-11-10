@@ -22,6 +22,7 @@ interface Sesion {
     password: string;
   }) => Promise<UsuarioResponse>;
   cerrarSesion: () => Promise<void>;
+  actualizarUsuario: (usuario: UsuarioResponse) => void;
 }
 
 const ContextoSesion = createContext<Sesion | null>(null);
@@ -79,9 +80,29 @@ export function ProveedorSesion({ children }: { children: React.ReactNode }) {
     setUsuario(null);
   }, []);
 
+  const actualizarUsuario = useCallback((usuarioActualizado: UsuarioResponse) => {
+    setUsuario(usuarioActualizado);
+  }, []);
+
   const valor = useMemo<Sesion>(
-    () => ({ usuario, token, cargando, iniciarSesion, registrarse, cerrarSesion }),
-    [usuario, token, cargando, iniciarSesion, registrarse, cerrarSesion],
+    () => ({
+      usuario,
+      token,
+      cargando,
+      iniciarSesion,
+      registrarse,
+      cerrarSesion,
+      actualizarUsuario,
+    }),
+    [
+      usuario,
+      token,
+      cargando,
+      iniciarSesion,
+      registrarse,
+      cerrarSesion,
+      actualizarUsuario,
+    ],
   );
 
   return <ContextoSesion.Provider value={valor}>{children}</ContextoSesion.Provider>;
