@@ -88,6 +88,6 @@ class SeguridadTest {
 
     @Test
     void rutaDeLoginEsPublica() throws Exception {
-        mvc.perform(post("/api/auth/login")).andExpect(status().isNotFound());
+        mvc.perform(post("/api/auth/login")).andExpect(status().isBadRequest());
     }
 }
