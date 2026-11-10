@@ -20,13 +20,13 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 |---|---|---|---|---|---|
 | M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
-| M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 2/3 | ◐ En proceso |
+| M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 3/3 | ☑ Hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 0/7 | ☐ No hecho |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 0/11 | ☐ No hecho |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **8/57 (14 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **9/57 (16 %)** | ◐ En proceso |
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
@@ -288,13 +288,13 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 3 — Ubicación: conjunto y apartamento
 
-**Estado:** ◐ En proceso · **Requisitos:** RF-02 · **Depende de:** M2
+**Estado:** ☑ Hecho · **Requisitos:** RF-02 · **Depende de:** M2
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
 | M3.1 | Endpoints de perfil y de ubicación | Must | `PUT /api/usuarios/yo/ubicacion` guarda y devuelve los datos | ☑ Hecho |
 | M3.2 | Validación y copia de los datos | Must | Campos vacíos → 400; el pedido guarda copia de los valores del momento | ☑ Hecho |
-| M3.3 | Pantalla Mi ubicación (móvil) | Must | El cliente guarda y vuelve a ver conjunto y apartamento | ☐ No hecho |
+| M3.3 | Pantalla Mi ubicación (móvil) | Must | El cliente guarda y vuelve a ver conjunto y apartamento | ☑ Hecho |
 
 **Done:** un cliente no puede modificar la ubicación de otro; los pedidos anteriores conservan la ubicación original (RNF-04).
 
