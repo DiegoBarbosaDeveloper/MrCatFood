@@ -1,6 +1,7 @@
 package com.diegodev.mrcatfood.usuario;
 
 import com.diegodev.mrcatfood.seguridad.UsuarioAutenticado;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,7 +23,7 @@ public class UsuarioController {
     @PutMapping("/yo/ubicacion")
     public ResponseEntity<UsuarioResponse> actualizarUbicacion(
             @AuthenticationPrincipal UsuarioAutenticado principal,
-            @RequestBody UbicacionRequest solicitud) {
+            @Valid @RequestBody UbicacionRequest solicitud) {
         return ResponseEntity.ok(servicio.actualizarUbicacion(principal.id(), solicitud));
     }
 }

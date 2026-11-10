@@ -293,7 +293,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
 | M3.1 | Endpoints de perfil y de ubicación | Must | `PUT /api/usuarios/yo/ubicacion` guarda y devuelve los datos | ☑ Hecho |
-| M3.2 | Validación y copia de los datos | Must | Campos vacíos → 400; el pedido guarda copia de los valores del momento | ☐ No hecho |
+| M3.2 | Validación y copia de los datos | Must | Campos vacíos → 400; el pedido guarda copia de los valores del momento | ◐ En proceso |
 | M3.3 | Pantalla Mi ubicación (móvil) | Must | El cliente guarda y vuelve a ver conjunto y apartamento | ☐ No hecho |
 
 **Done:** un cliente no puede modificar la ubicación de otro; los pedidos anteriores conservan la ubicación original (RNF-04).
