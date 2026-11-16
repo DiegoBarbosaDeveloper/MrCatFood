@@ -65,18 +65,34 @@ public class Producto {
 
     public Producto(
             String nombre, String descripcion, BigDecimal precio, Integer stock, boolean activo) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio.setScale(2, RoundingMode.HALF_UP);
-        this.stock = stock;
         this.activo = activo;
+        actualizarDatos(nombre, descripcion, precio, stock);
     }
 
     public void agregarIngrediente(String nombreIngrediente) {
-        ingredientes.add(new Ingrediente(this, nombreIngrediente));
+        ingredientes.add(new Ingrediente(this, nombreIngrediente.trim()));
+    }
+
+    public void actualizar(
+            String nombre,
+            String descripcion,
+            BigDecimal precio,
+            Integer stock,
+            List<String> nombresIngredientes) {
+        actualizarDatos(nombre, descripcion, precio, stock);
+        ingredientes.clear();
+        nombresIngredientes.forEach(this::agregarIngrediente);
     }
 
     public boolean estaDisponible() {
         return activo && stock > 0;
+    }
+
+    private void actualizarDatos(
+            String nombre, String descripcion, BigDecimal precio, Integer stock) {
+        this.nombre = nombre.trim();
+        this.descripcion = descripcion.trim();
+        this.precio = precio.setScale(2, RoundingMode.HALF_UP);
+        this.stock = stock;
     }
 }
