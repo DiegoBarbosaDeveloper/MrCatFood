@@ -21,12 +21,12 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 2/3 | ◐ En proceso |
-| M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 2/7 | ◐ En proceso |
+| M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 3/7 | ◐ En proceso |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 0/11 | ☐ No hecho |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **10/57 (18 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **11/57 (19 %)** | ◐ En proceso |
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
@@ -306,7 +306,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 |---|---|---|---|---|
 | M4.1 | Migración de productos, ingredientes y datos de ejemplo | Must | Tablas creadas y catálogo de ejemplo cargado | ☑ Hecho |
 | M4.2 | Catálogo público | Must | `GET /api/productos` devuelve solo activos con los datos del RF-04 | ☑ Hecho |
-| M4.3 | Detalle de producto | Must | `GET /api/productos/{id}`; inexistente o inactivo → 404 | ☐ No hecho |
+| M4.3 | Detalle de producto | Must | `GET /api/productos/{id}`; inexistente o inactivo → 404 | ☑ Hecho |
 | M4.4 | Alta y edición de productos (admin) | Must | Crear y editar con rol ADMIN; con rol CLIENTE → 403 | ☐ No hecho |
 | M4.5 | Actualización de precio y disponibilidad | Must | El cambio se refleja en el catálogo público en la siguiente consulta | ☐ No hecho |
 | M4.6 | Pantallas de catálogo y detalle (móvil) | Must | Lista con precio, ingredientes y badge de disponibilidad | ☐ No hecho |
