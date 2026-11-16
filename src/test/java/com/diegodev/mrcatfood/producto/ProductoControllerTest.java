@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.diegodev.mrcatfood.comun.CodigoError;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,42 @@ class ProductoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    void detallePublicoDevuelveProductoActivoConIngredientes() throws Exception {
+        Producto producto = producto("Sándwich de pollo", "Pollo y vegetales", "15000", 5, true);
+        producto.agregarIngrediente("Pan artesanal");
+        producto.agregarIngrediente("Pollo");
+        Producto guardado = productos.saveAndFlush(producto);
+
+        mvc.perform(get("/api/productos/{productoId}", guardado.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(guardado.getId()))
+                .andExpect(jsonPath("$.nombre").value("Sándwich de pollo"))
+                .andExpect(jsonPath("$.descripcion").value("Pollo y vegetales"))
+                .andExpect(jsonPath("$.precio").value(15000.00))
+                .andExpect(jsonPath("$.stock").value(5))
+                .andExpect(jsonPath("$.disponible").value(true))
+                .andExpect(jsonPath("$.ingredientes.length()").value(2));
+    }
+
+    @Test
+    void detalleDeProductoInactivoDevuelve404() throws Exception {
+        Producto inactivo =
+                productos.saveAndFlush(
+                        producto("Sándwich inactivo", "Fuera del catálogo", "18000", 4, false));
+
+        mvc.perform(get("/api/productos/{productoId}", inactivo.getId()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(CodigoError.RECURSO_NO_ENCONTRADO.name()));
+    }
+
+    @Test
+    void detalleDeProductoInexistenteDevuelve404() throws Exception {
+        mvc.perform(get("/api/productos/{productoId}", Long.MAX_VALUE))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(CodigoError.RECURSO_NO_ENCONTRADO.name()));
     }
 
     private Producto producto(
