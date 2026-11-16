@@ -32,4 +32,39 @@ public class ProductoService {
                                                 "Producto no encontrado"));
         return ProductoResponse.de(producto);
     }
+
+    @Transactional
+    public ProductoResponse crearProducto(ProductoRequest solicitud) {
+        Producto producto =
+                new Producto(
+                        solicitud.nombre(),
+                        solicitud.descripcion(),
+                        solicitud.precio(),
+                        solicitud.stock(),
+                        true);
+        solicitud.ingredientes().forEach(producto::agregarIngrediente);
+        return ProductoResponse.de(productos.save(producto));
+    }
+
+    @Transactional
+    public ProductoResponse actualizarProducto(Long productoId, ProductoRequest solicitud) {
+        Producto producto = buscarProductoPorId(productoId);
+        producto.actualizar(
+                solicitud.nombre(),
+                solicitud.descripcion(),
+                solicitud.precio(),
+                solicitud.stock(),
+                solicitud.ingredientes());
+        return ProductoResponse.de(producto);
+    }
+
+    private Producto buscarProductoPorId(Long productoId) {
+        return productos
+                .findById(productoId)
+                .orElseThrow(
+                        () ->
+                                new ApiException(
+                                        CodigoError.RECURSO_NO_ENCONTRADO,
+                                        "Producto no encontrado"));
+    }
 }

@@ -11,6 +11,7 @@ public record ProductoResponse(
         List<String> ingredientes,
         BigDecimal precio,
         Integer stock,
+        boolean activo,
         boolean disponible) {
 
     public static ProductoResponse de(Producto producto) {
@@ -23,6 +24,7 @@ public record ProductoResponse(
                 nombresIngredientes,
                 producto.getPrecio(),
                 producto.getStock(),
+                producto.isActivo(),
                 producto.estaDisponible());
     }
 }
