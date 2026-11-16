@@ -1,5 +1,7 @@
 package com.diegodev.mrcatfood.producto;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -135,6 +137,111 @@ class AdminProductoControllerTest {
                                 .content(solicitudProducto("Inexistente", "12000", 3)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.codigo").value(CodigoError.RECURSO_NO_ENCONTRADO.name()));
+    }
+
+    @Test
+    void listadoAdministrativoIncluyeProductosInactivos() throws Exception {
+        productos.save(
+                new Producto("Producto activo", "Descripción", new BigDecimal("10000"), 2, true));
+        productos.saveAndFlush(
+                new Producto(
+                        "Producto inactivo", "Descripción", new BigDecimal("12000"), 4, false));
+
+        mvc.perform(get("/api/admin/productos").header("Authorization", autorizacion(Rol.ADMIN)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].activo").value(true))
+                .andExpect(jsonPath("$[1].activo").value(false));
+    }
+
+    @Test
+    void cambioDePrecioSeReflejaEnDetallePublico() throws Exception {
+        Producto producto =
+                productos.saveAndFlush(
+                        new Producto(
+                                "Producto con precio",
+                                "Descripción",
+                                new BigDecimal("10000"),
+                                2,
+                                true));
+
+        mvc.perform(
+                        put("/api/admin/productos/{productoId}", producto.getId())
+                                .header("Authorization", autorizacion(Rol.ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(solicitudProducto("Producto con precio", "22500", 2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.precio").value(22500.00));
+
+        mvc.perform(get("/api/productos/{productoId}", producto.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.precio").value(22500.00));
+    }
+
+    @Test
+    void cambioDeStockYActivacionSeReflejaEnCatalogoPublico() throws Exception {
+        Producto producto =
+                productos.saveAndFlush(
+                        new Producto(
+                                "Producto disponible",
+                                "Descripción",
+                                new BigDecimal("10000"),
+                                3,
+                                true));
+
+        mvc.perform(
+                        patch("/api/admin/productos/{productoId}/disponibilidad", producto.getId())
+                                .header("Authorization", autorizacion(Rol.ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"activo\":true,\"stock\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.stock").value(0))
+                .andExpect(jsonPath("$.disponible").value(false));
+
+        mvc.perform(get("/api/productos/{productoId}", producto.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.stock").value(0))
+                .andExpect(jsonPath("$.disponible").value(false));
+
+        mvc.perform(
+                        patch("/api/admin/productos/{productoId}/disponibilidad", producto.getId())
+                                .header("Authorization", autorizacion(Rol.ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"activo\":false,\"stock\":5}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.activo").value(false));
+
+        mvc.perform(get("/api/productos/{productoId}", producto.getId()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void clienteNoPuedeCambiarDisponibilidadYStockNegativoDevuelve400() throws Exception {
+        Producto producto =
+                productos.saveAndFlush(
+                        new Producto(
+                                "Producto protegido",
+                                "Descripción",
+                                new BigDecimal("10000"),
+                                3,
+                                true));
+
+        mvc.perform(
+                        patch("/api/admin/productos/{productoId}/disponibilidad", producto.getId())
+                                .header("Authorization", autorizacion(Rol.CLIENTE))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"activo\":false,\"stock\":0}"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.codigo").value(CodigoError.ACCESO_DENEGADO.name()));
+
+        mvc.perform(
+                        patch("/api/admin/productos/{productoId}/disponibilidad", producto.getId())
+                                .header("Authorization", autorizacion(Rol.ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"activo\":true,\"stock\":-1}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.codigo").value(CodigoError.DATOS_INVALIDOS.name()))
+                .andExpect(jsonPath("$.campos.stock").exists());
     }
 
     private String autorizacion(Rol rol) {
