@@ -28,6 +28,7 @@ class MigracionProductoTest {
                         .locations("classpath:db/migration")
                         .baselineOnMigrate(true)
                         .baselineVersion("1")
+                        .target("2")
                         .load()
                         .migrate();
 
