@@ -13,11 +13,13 @@ export default function DisposicionCliente() {
         name="carrito"
         options={{ title: cantidadCarrito > 0 ? `Carrito (${cantidadCarrito})` : "Carrito" }}
       />
+      <Tabs.Screen name="mis-pedidos" options={{ title: "Mis pedidos" }} />
       <Tabs.Screen name="perfil" options={{ title: "Perfil" }} />
       <Tabs.Screen name="mi-ubicacion" options={{ title: "Mi ubicación", href: null }} />
       <Tabs.Screen name="detalle-producto" options={{ title: "Detalle", href: null }} />
       <Tabs.Screen name="entrega" options={{ title: "Entrega", href: null }} />
       <Tabs.Screen name="confirmacion" options={{ title: "Confirmar pedido", href: null }} />
+      <Tabs.Screen name="detalle-pedido" options={{ title: "Detalle del pedido", href: null }} />
     </Tabs>
   );
 }

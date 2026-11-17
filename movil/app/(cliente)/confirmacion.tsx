@@ -61,10 +61,15 @@ export default function Confirmacion() {
         </Text>
         <Pressable
           accessibilityRole="button"
-          onPress={() => router.replace("/(cliente)")}
+          onPress={() =>
+            router.replace({
+              pathname: "/(cliente)/detalle-pedido",
+              params: { pedidoId: pedidoConfirmado.id.toString() },
+            })
+          }
           style={estilos.botonPrincipal}
         >
-          <Text style={estilos.textoBoton}>Volver al catálogo</Text>
+          <Text style={estilos.textoBoton}>Ver detalle del pedido</Text>
         </Pressable>
       </View>
     );
