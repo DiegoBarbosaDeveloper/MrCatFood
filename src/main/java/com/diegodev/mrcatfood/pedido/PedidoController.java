@@ -1,6 +1,7 @@
 package com.diegodev.mrcatfood.pedido;
 
 import com.diegodev.mrcatfood.pedido.dto.CrearPedidoRequest;
+import com.diegodev.mrcatfood.pedido.dto.EnlaceWhatsAppResponse;
 import com.diegodev.mrcatfood.pedido.dto.PedidoResponse;
 import com.diegodev.mrcatfood.pedido.dto.PrevisualizacionPedidoResponse;
 import com.diegodev.mrcatfood.pedido.dto.PrevisualizarPedidoRequest;
@@ -24,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PedidoController {
 
     private final PedidoService servicio;
+    private final WhatsAppService servicioWhatsApp;
 
-    public PedidoController(PedidoService servicio) {
+    public PedidoController(PedidoService servicio, WhatsAppService servicioWhatsApp) {
         this.servicio = servicio;
+        this.servicioWhatsApp = servicioWhatsApp;
     }
 
     @PostMapping("/preview")
@@ -56,5 +59,12 @@ public class PedidoController {
     public ResponseEntity<PedidoResponse> consultarPedidoPropio(
             @AuthenticationPrincipal UsuarioAutenticado principal, @PathVariable Long pedidoId) {
         return ResponseEntity.ok(servicio.consultarPedidoCliente(principal.id(), pedidoId));
+    }
+
+    @PostMapping("/{pedidoId}/whatsapp")
+    public ResponseEntity<EnlaceWhatsAppResponse> generarEnlaceWhatsApp(
+            @AuthenticationPrincipal UsuarioAutenticado principal, @PathVariable Long pedidoId) {
+        String enlace = servicioWhatsApp.generarEnlaceParaCliente(principal.id(), pedidoId);
+        return ResponseEntity.ok(new EnlaceWhatsAppResponse(enlace));
     }
 }

@@ -1,6 +1,7 @@
 package com.diegodev.mrcatfood.pedido;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import com.diegodev.mrcatfood.config.WhatsAppProperties;
 import java.net.URLDecoder;
@@ -11,7 +12,9 @@ class WhatsAppServiceTest {
 
     private final WhatsAppService servicio =
             new WhatsAppService(
-                    new WhatsAppProperties("573001234567"), new MensajePedidoFormatter());
+                    new WhatsAppProperties("573001234567"),
+                    new MensajePedidoFormatter(),
+                    mock(PedidoRepository.class));
 
     @Test
     void generaElEnlaceConElNumeroNormalizado() {
