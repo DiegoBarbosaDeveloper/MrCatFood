@@ -19,18 +19,18 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | # | Módulo | Requisitos | Tareas | Progreso | Estado |
 |---|---|---|---|---|---|
 | M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
-| M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
+| M2 | Registro de clientes | RF-01, RNF-01 | 10 | 10/10 | ☑ Hecho |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 3/3 | ☑ Hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 7/7 | ☑ Hecho |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 11/11 | ☑ Hecho |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **27/57 (47 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **37/57 (65 %)** | ◐ En proceso |
 
-**Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
+**Cerrado en este ciclo:** M1 a M5 fusionados en `dev`. M2 quedó cerrado con sus 10 tareas fusionadas mediante los PR #11 a #16; `./gradlew build` en verde (Spotless + pruebas).
 
-**En proceso ahora:** M2.10 Andamiaje de la app móvil completado; M2 queda cerrado cuando sus PR se fusionen en `dev`.
+**En proceso ahora:** ninguno. El siguiente módulo es M6 (notificación mediante WhatsApp).
 
 **Reglas del tablero**
 
@@ -268,20 +268,20 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 2 — Registro de clientes
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-01, RNF-01 · **Depende de:** M1
+**Estado:** ☑ Hecho · **Requisitos:** RF-01, RNF-01 · **Depende de:** M1
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ◐ En proceso |
-| M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ◐ En proceso |
-| M2.3 | Entidad `Usuario`, roles y repositorio | Must | `Usuario` mapeada y validada contra el esquema | ◐ En proceso |
-| M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ◐ En proceso |
-| M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ◐ En proceso |
-| M2.6 | Cuenta de la administradora al arrancar | Must | Arranca dos veces sin duplicar el admin; contraseña con BCrypt | ◐ En proceso |
-| M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ◐ En proceso |
-| M2.8 | Usuario autenticado actual | Must | `GET /api/auth/yo` devuelve los datos del token, nunca los de otro | ◐ En proceso |
-| M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ◐ En proceso |
-| M2.10 | Pantalla de acceso y registro (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ◐ En proceso |
+| M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ☑ Hecho |
+| M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ☑ Hecho |
+| M2.3 | Entidad `Usuario`, roles y repositorio | Must | `Usuario` mapeada y validada contra el esquema | ☑ Hecho |
+| M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ☑ Hecho |
+| M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ☑ Hecho |
+| M2.6 | Cuenta de la administradora al arrancar | Must | Arranca dos veces sin duplicar el admin; contraseña con BCrypt | ☑ Hecho |
+| M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ☑ Hecho |
+| M2.8 | Usuario autenticado actual | Must | `GET /api/auth/yo` devuelve los datos del token, nunca los de otro | ☑ Hecho |
+| M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ☑ Hecho |
+| M2.10 | Pantalla de acceso y registro (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ☑ Hecho |
 
 **Ready:** M1 cerrado; contrato de registro y login definido con ejemplos; regla de la cuenta admin decidida (cuenta única).
 **Done:** **prueba de escalada de privilegios**: un registro con `"rol":"ADMIN"` en el cuerpo devuelve 400 y el usuario queda `CLIENTE`; contraseña nunca en texto plano ni en el repositorio.
@@ -316,7 +316,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 5 — Gestión de pedidos
 
-**Estado:** ◐ En proceso · **Requisitos:** RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 · **Depende de:** M3 y M4
+**Estado:** ☑ Hecho · **Requisitos:** RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 · **Depende de:** M3 y M4
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
