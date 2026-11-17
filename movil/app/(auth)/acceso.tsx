@@ -19,7 +19,7 @@ export default function Acceso() {
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
 
-  const { control, handleSubmit, formState } = useForm<Formulario>({
+  const { control, handleSubmit } = useForm<Formulario>({
     resolver: zodResolver(esquema),
     defaultValues: { email: "", password: "" },
   });

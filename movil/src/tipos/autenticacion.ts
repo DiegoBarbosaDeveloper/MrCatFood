@@ -10,6 +10,8 @@ export interface UsuarioResponse {
   email: string;
   telefono: string;
   rol: "CLIENTE" | "ADMIN";
+  conjuntoResidencial: string | null;
+  apartamento: string | null;
 }
 
 export interface ProblemaHttp {

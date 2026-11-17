@@ -5,6 +5,7 @@ export default function DisposicionCliente() {
     <Tabs screenOptions={{ headerShown: true }}>
       <Tabs.Screen name="index" options={{ title: "Catálogo" }} />
       <Tabs.Screen name="perfil" options={{ title: "Perfil" }} />
+      <Tabs.Screen name="mi-ubicacion" options={{ title: "Mi ubicación", href: null }} />
     </Tabs>
   );
 }
