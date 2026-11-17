@@ -53,6 +53,17 @@ class ValidadorFechaEntregaTest {
     }
 
     @Test
+    void rechazaElBordeSuperiorInmediatamenteFueraDeLaVentana() {
+        assertThatThrownBy(
+                        () -> validador.validarFechaEntrega(HOY.plusDays(1), LocalTime.of(21, 1)))
+                .isInstanceOfSatisfying(
+                        ApiException.class,
+                        excepcion ->
+                                assertThat(excepcion.codigo())
+                                        .isEqualTo(CodigoError.FECHA_ENTREGA_INVALIDA));
+    }
+
+    @Test
     void rechazaUnaHoraFueraDeLaVentanaIndicandoElHorarioValido() {
         assertThatThrownBy(
                         () -> validador.validarFechaEntrega(HOY.plusDays(1), LocalTime.of(10, 59)))

@@ -291,6 +291,17 @@ Reglas: nombres `V{n}__descripcion_en_snake_case.sql`; una migración por tarea 
 
 Reglas: ninguna prueba depende del orden de ejecución; cada prueba de integración parte de una base limpia (`@Transactional` o truncado); cada RN de §8 tiene al menos una prueba que falla si la regla se rompe; `./gradlew test` debe quedar en verde antes del PR.
 
+### Ejecución de la suite de integración (M7.3)
+
+Hay dos suites con etiquetas JUnit distintas:
+
+- `./gradlew test` — rápida, sobre H2; **excluye** la etiqueta `integracion`.
+- `./gradlew integrationTest` — sobre PostgreSQL efímero con Testcontainers; **solo** incluye la etiqueta `integracion`.
+
+La clase `BaseIntegracionTest` declara un `PostgreSQLContainer("postgres:18")` como bean con `@ServiceConnection`, de modo que Spring inyecta la URL, el usuario y la contraseña del contenedor. El perfil `integracion` activa Flyway y `ddl-auto: validate`; la base de desarrollo en `5432` no se toca.
+
+Testcontainers necesita un runtime de contenedores. `build.gradle.kts` detecta el socket de Podman en `$XDG_RUNTIME_DIR/podman/podman.sock` y lo exporta como `DOCKER_HOST`; también desactiva Ryuk (`TESTCONTAINERS_RYUK_DISABLED=true`) porque no funciona bien con Podman sin root. Con Docker basta con dejar `DOCKER_HOST` apuntando a su socket.
+
 ## 14. Riesgos técnicos
 
 | Riesgo | Mitigación |
