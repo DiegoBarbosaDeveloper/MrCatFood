@@ -222,6 +222,7 @@ puedes perder todos los datos locales.
 - [Manual de cliente](docs/manual-cliente.md)
 - [Manual de administradora](docs/manual-administradora.md)
 - [Matriz de trazabilidad](docs/matriz-trazabilidad.md)
+- [Plan de despliegue](docs/despliegue.md)
 
 ## Seguridad
 
