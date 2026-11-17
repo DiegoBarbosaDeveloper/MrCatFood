@@ -21,6 +21,11 @@ public class ProductoService {
     }
 
     @Transactional(readOnly = true)
+    public List<ProductoResponse> buscarTodosLosProductos() {
+        return productos.buscarTodosConIngredientes().stream().map(ProductoResponse::de).toList();
+    }
+
+    @Transactional(readOnly = true)
     public ProductoResponse buscarProductoActivo(Long productoId) {
         Producto producto =
                 productos
@@ -55,6 +60,14 @@ public class ProductoService {
                 solicitud.precio(),
                 solicitud.stock(),
                 solicitud.ingredientes());
+        return ProductoResponse.de(producto);
+    }
+
+    @Transactional
+    public ProductoResponse actualizarDisponibilidad(
+            Long productoId, DisponibilidadRequest solicitud) {
+        Producto producto = buscarProductoPorId(productoId);
+        producto.actualizarDisponibilidad(solicitud.activo(), solicitud.stock());
         return ProductoResponse.de(producto);
     }
 

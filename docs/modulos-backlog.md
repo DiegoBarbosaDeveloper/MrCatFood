@@ -308,7 +308,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M4.2 | Catálogo público | Must | `GET /api/productos` devuelve solo activos con los datos del RF-04 | ☑ Hecho |
 | M4.3 | Detalle de producto | Must | `GET /api/productos/{id}`; inexistente o inactivo → 404 | ☑ Hecho |
 | M4.4 | Alta y edición de productos (admin) | Must | Crear y editar con rol ADMIN; con rol CLIENTE → 403 | ☑ Hecho |
-| M4.5 | Actualización de precio y disponibilidad | Must | El cambio se refleja en el catálogo público en la siguiente consulta | ☐ No hecho |
+| M4.5 | Actualización de precio y disponibilidad | Must | El cambio se refleja en el catálogo público en la siguiente consulta | ☑ Hecho |
 | M4.6 | Pantallas de catálogo y detalle (móvil) | Must | Lista con precio, ingredientes y badge de disponibilidad | ☐ No hecho |
 | M4.7 | Pantallas admin de productos (móvil) | Must | La administradora edita precio, stock e ingredientes desde el celular | ☐ No hecho |
 

@@ -88,6 +88,11 @@ public class Producto {
         return activo && stock > 0;
     }
 
+    public void actualizarDisponibilidad(boolean activo, Integer stock) {
+        this.activo = activo;
+        this.stock = stock;
+    }
+
     private void actualizarDatos(
             String nombre, String descripcion, BigDecimal precio, Integer stock) {
         this.nombre = nombre.trim();
