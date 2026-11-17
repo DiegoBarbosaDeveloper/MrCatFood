@@ -71,7 +71,8 @@ public class MensajePedidoFormatter {
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols(Locale.of("es", "CO"));
         simbolos.setGroupingSeparator('.');
         simbolos.setDecimalSeparator(',');
-        DecimalFormat formato = new DecimalFormat("#,##0", simbolos);
+        String patron = valor.stripTrailingZeros().scale() > 0 ? "#,##0.00" : "#,##0";
+        DecimalFormat formato = new DecimalFormat(patron, simbolos);
         return "$ " + formato.format(valor);
     }
 }

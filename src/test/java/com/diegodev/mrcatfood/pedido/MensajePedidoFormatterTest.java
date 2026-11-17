@@ -93,4 +93,38 @@ class MensajePedidoFormatterTest {
 
         assertThat(mensaje).contains("Total: $ 43.000").doesNotContain("$ 43.000,00");
     }
+
+    @Test
+    void conservaAcentosYSaltosDeLineaEnLasNotas() {
+        String mensaje =
+                formateador.formatear(
+                        crearPedido(
+                                LocalTime.of(12, 30),
+                                "Sin cebolla\nSin tomate\t¡Gracias, señora María!"));
+
+        assertThat(mensaje).contains("Notas: Sin cebolla\nSin tomate\t¡Gracias, señora María!");
+    }
+
+    @Test
+    void muestraLosCentavosCuandoElImporteNoEsEntero() {
+        Usuario cliente =
+                new Usuario("Ana Pérez", "ana@example.com", "3001234567", "hash", Rol.CLIENTE);
+        cliente.actualizarUbicacion("Conjunto Los Gatos", "101");
+        Pedido pedido =
+                new Pedido(
+                        "MRC-2026-000124",
+                        cliente,
+                        LocalDate.of(2026, 11, 17),
+                        LocalTime.of(12, 30),
+                        null,
+                        new BigDecimal("43250.50"),
+                        new BigDecimal("43250.50"));
+        pedido.agregarDetalle(null, "Sándwich de pollo", new BigDecimal("43250.50"), 1);
+
+        String mensaje = formateador.formatear(pedido);
+
+        assertThat(mensaje)
+                .contains("Total: $ 43.250,50")
+                .contains("1 × Sándwich de pollo — $ 43.250,50");
+    }
 }
