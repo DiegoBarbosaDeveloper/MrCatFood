@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: mrcatfood-api
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: main
+    autoDeployTrigger: commit
+    healthCheckPath: /api/configuracion/horario
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: JWT_SECRETO
+        generateValue: true
+      - key: JWT_EXPIRACION_MINUTOS
+        value: "120"
+      - key: WHATSAPP_NUMERO
+        sync: false
+      - key: CORS_ORIGENES_PERMITIDOS
+        sync: false
+      - key: PEDIDOS_HORARIO_INICIO
+        value: "08:00"
+      - key: PEDIDOS_HORARIO_FIN
+        value: "20:00"
+      - key: PEDIDOS_ENTREGA_INICIO
+        value: "11:00"
+      - key: PEDIDOS_ENTREGA_FIN
+        value: "21:00"
+      - key: PEDIDOS_ZONA
+        value: America/Bogota
