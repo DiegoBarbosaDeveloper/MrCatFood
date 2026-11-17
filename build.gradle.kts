@@ -50,12 +50,39 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
     testImplementation("org.springframework.boot:spring-boot-starter-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers-postgresql")
     testCompileOnly("org.projectlombok:lombok")
     testRuntimeOnly("com.h2database:h2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testAnnotationProcessor("org.projectlombok:lombok")
 }
 
+val podmanSocket = System.getenv("XDG_RUNTIME_DIR")?.let { "$it/podman/podman.sock" }
+val dockerHost =
+    System.getenv("DOCKER_HOST")
+        ?: podmanSocket?.takeIf { file(it).exists() }?.let { "unix://$it" }
+
 tasks.withType<Test> {
     useJUnitPlatform()
+    dockerHost?.let { environment("DOCKER_HOST", it) }
+    environment("TESTCONTAINERS_RYUK_DISABLED", "true")
 }
+
+tasks.test {
+    useJUnitPlatform { excludeTags("integracion") }
+}
+
+val integracionTest =
+    tasks.register<Test>("integrationTest") {
+        description = "Ejecuta las pruebas de integración sobre PostgreSQL efímero."
+        group = "verification"
+        testClassesDirs =
+            sourceSets.test
+                .get()
+                .output.classesDirs
+        classpath = sourceSets.test.get().runtimeClasspath
+        useJUnitPlatform { includeTags("integracion") }
+        shouldRunAfter(tasks.test)
+    }

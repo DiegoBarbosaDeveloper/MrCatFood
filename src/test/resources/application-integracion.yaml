@@ -1,0 +1,21 @@
+# Perfil de integración: PostgreSQL efímero gestionado por Testcontainers.
+# @ServiceConnection inyecta la URL, el usuario y la contraseña del contenedor;
+# Flyway aplica las mismas migraciones que en desarrollo.
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+seguridad:
+  jwt:
+    secreto: clave-de-integracion-con-mas-de-32-bytes-0123456789
+    expiracion-minutos: 120
+
+whatsapp:
+  numero: "573001234567"
+
+ADMIN_EMAIL: admin-test@mrcatfood.local
+ADMIN_PASSWORD: clave-admin-de-prueba
