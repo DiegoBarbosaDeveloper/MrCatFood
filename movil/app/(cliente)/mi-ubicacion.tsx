@@ -11,26 +11,14 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { z } from "zod";
 import { autenticacionApi } from "../../src/api/autenticacionApi";
 import { ErrorHttp } from "../../src/api/clienteHttp";
 import { usuariosApi } from "../../src/api/usuariosApi";
 import { useSesion } from "../../src/funcionalidades/sesion/contextoSesion";
-
-const esquemaUbicacion = z.object({
-  conjuntoResidencial: z
-    .string()
-    .trim()
-    .min(1, "El conjunto residencial es obligatorio")
-    .max(120, "Debe tener máximo 120 caracteres"),
-  apartamento: z
-    .string()
-    .trim()
-    .min(1, "El apartamento es obligatorio")
-    .max(60, "Debe tener máximo 60 caracteres"),
-});
-
-type FormularioUbicacion = z.infer<typeof esquemaUbicacion>;
+import {
+  esquemaUbicacion,
+  type FormularioUbicacion,
+} from "../../src/validacion/esquemasFormularios";
 
 export default function MiUbicacion() {
   const clienteConsultas = useQueryClient();

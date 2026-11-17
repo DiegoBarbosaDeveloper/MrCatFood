@@ -3,15 +3,11 @@ import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native";
-import { z } from "zod";
 import { useSesion } from "../../src/funcionalidades/sesion/contextoSesion";
-
-const esquema = z.object({
-  email: z.string().email("Correo inválido"),
-  password: z.string().min(8, "Mínimo 8 caracteres"),
-});
-
-type Formulario = z.infer<typeof esquema>;
+import {
+  esquemaAcceso as esquema,
+  type FormularioAcceso as Formulario,
+} from "../../src/validacion/esquemasFormularios";
 
 export default function Acceso() {
   const { iniciarSesion } = useSesion();
