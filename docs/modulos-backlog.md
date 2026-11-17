@@ -30,7 +30,7 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 
 **Cerrado en este ciclo:** M1 a M5 fusionados en `dev`. M2 quedó cerrado con sus 10 tareas fusionadas mediante los PR #11 a #16; `./gradlew build` en verde (Spotless + pruebas). M6 implementado en las ramas `M6.1`–`M6.5` con `./gradlew build` (115 pruebas) y lint/typecheck móvil en verde. M7 implementado en las ramas `M7.1`–`M7.9`: 122 pruebas rápidas, 23 de integración sobre PostgreSQL efímero y 27 de móvil, todas en verde; cobertura y trazabilidad en `docs/reporte-cobertura.md`.
 
-**En proceso ahora:** M8.1–M8.3 apiladas; M8.3 implementa el flujo HTTP completo.
+**En proceso ahora:** M8.1–M8.4 apiladas; M8.4 consolida la trazabilidad RF/RNF.
 
 **Reglas del tablero**
 
@@ -375,7 +375,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M8.1 | Documentación OpenAPI y esquema Bearer | Should | Swagger UI navegable y el botón *Authorize* funciona | ◐ En proceso |
 | M8.2 | README de instalación y uso | Must | Alguien sin contexto sigue los pasos y levanta el sistema | ◐ En proceso |
 | M8.3 | Colección HTTP del flujo completo | Must | `.http` encadena registro → catálogo → pedido → WhatsApp | ◐ En proceso |
-| M8.4 | Matriz de trazabilidad RF/RNF | Must | Cada requisito apunta a endpoint, rama y prueba | ☐ No hecho |
+| M8.4 | Matriz de trazabilidad RF/RNF | Must | Cada requisito apunta a endpoint, rama y prueba | ◐ En proceso |
 | M8.5 | Manuales de cliente y administradora | Should | Manuales con capturas o secuencia de pasos | ☐ No hecho |
 | M8.6 | Plan de despliegue | Could | Variables de producción documentadas; destino de despliegue definido | ☐ No hecho |
 
