@@ -23,6 +23,15 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
             SELECT DISTINCT producto
             FROM Producto producto
             LEFT JOIN FETCH producto.ingredientes
+            ORDER BY producto.nombre
+            """)
+    List<Producto> buscarTodosConIngredientes();
+
+    @Query(
+            """
+            SELECT DISTINCT producto
+            FROM Producto producto
+            LEFT JOIN FETCH producto.ingredientes
             WHERE producto.id = :productoId AND producto.activo = true
             """)
     Optional<Producto> buscarActivoPorIdConIngredientes(@Param("productoId") Long productoId);
