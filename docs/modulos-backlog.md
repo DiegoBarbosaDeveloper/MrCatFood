@@ -21,12 +21,12 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 3/3 | ☑ Hecho |
-| M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 5/7 | ◐ En proceso |
+| M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 7/7 | ☑ Hecho |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 0/11 | ☐ No hecho |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **14/57 (25 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **16/57 (28 %)** | ◐ En proceso |
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
@@ -300,7 +300,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 4 — Catálogo de sándwiches
 
-**Estado:** ◐ En proceso · **Requisitos:** RF-03, RF-04, RF-05 · **Depende de:** M2
+**Estado:** ☑ Hecho · **Requisitos:** RF-03, RF-04, RF-05 · **Depende de:** M2
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
@@ -310,7 +310,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M4.4 | Alta y edición de productos (admin) | Must | Crear y editar con rol ADMIN; con rol CLIENTE → 403 | ☑ Hecho |
 | M4.5 | Actualización de precio y disponibilidad | Must | El cambio se refleja en el catálogo público en la siguiente consulta | ☑ Hecho |
 | M4.6 | Pantallas de catálogo y detalle (móvil) | Must | Lista con precio, ingredientes y badge de disponibilidad | ☑ Hecho |
-| M4.7 | Pantallas admin de productos (móvil) | Must | La administradora edita precio, stock e ingredientes desde el celular | ☐ No hecho |
+| M4.7 | Pantallas admin de productos (móvil) | Must | La administradora edita precio, stock e ingredientes desde el celular | ☑ Hecho |
 
 **Done:** producto inactivo nunca aparece en el catálogo; stock en cero muestra "Agotado"; `stock >= 0` y `precio >= 0` garantizados por el esquema.
 
