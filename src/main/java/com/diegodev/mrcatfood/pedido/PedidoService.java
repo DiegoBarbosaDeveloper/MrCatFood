@@ -2,9 +2,12 @@ package com.diegodev.mrcatfood.pedido;
 
 import com.diegodev.mrcatfood.comun.ApiException;
 import com.diegodev.mrcatfood.comun.CodigoError;
+import com.diegodev.mrcatfood.pedido.dto.ClientePedidoResponse;
 import com.diegodev.mrcatfood.pedido.dto.CrearPedidoRequest;
 import com.diegodev.mrcatfood.pedido.dto.DetalleResponse;
+import com.diegodev.mrcatfood.pedido.dto.PaginaResponse;
 import com.diegodev.mrcatfood.pedido.dto.PedidoResponse;
+import com.diegodev.mrcatfood.pedido.dto.PedidoResumenResponse;
 import com.diegodev.mrcatfood.pedido.dto.PrevisualizacionPedidoResponse;
 import com.diegodev.mrcatfood.pedido.dto.PrevisualizarPedidoRequest;
 import com.diegodev.mrcatfood.pedido.dto.ProductoCantidadRequest;
@@ -22,6 +25,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,6 +115,58 @@ public class PedidoService {
     public PedidoResponse consultarPedidoCliente(Long clienteId, Long pedidoId) {
         Pedido pedido =
                 pedidos.buscarPorIdYCliente(pedidoId, clienteId)
+                        .orElseThrow(PedidoService::pedidoNoEncontrado);
+        return convertirRespuesta(pedido);
+    }
+
+    @Transactional(readOnly = true)
+    public PaginaResponse<PedidoResumenResponse> consultarPedidosAdministracion(
+            EstadoPedido estado,
+            LocalDate fechaDesde,
+            LocalDate fechaHasta,
+            int pagina,
+            int tamano) {
+        validarPaginacionYRango(fechaDesde, fechaHasta, pagina, tamano);
+        Specification<Pedido> filtros = (raiz, consulta, constructor) -> constructor.conjunction();
+        if (estado != null) {
+            filtros =
+                    filtros.and(
+                            (raiz, consulta, constructor) ->
+                                    constructor.equal(raiz.get("estado"), estado));
+        }
+        if (fechaDesde != null) {
+            filtros =
+                    filtros.and(
+                            (raiz, consulta, constructor) ->
+                                    constructor.greaterThanOrEqualTo(
+                                            raiz.get("fechaEntrega"), fechaDesde));
+        }
+        if (fechaHasta != null) {
+            filtros =
+                    filtros.and(
+                            (raiz, consulta, constructor) ->
+                                    constructor.lessThanOrEqualTo(
+                                            raiz.get("fechaEntrega"), fechaHasta));
+        }
+
+        Page<Pedido> resultado =
+                pedidos.findAll(
+                        filtros,
+                        PageRequest.of(pagina, tamano, Sort.by(Sort.Direction.DESC, "creadoEn")));
+        List<PedidoResumenResponse> contenido =
+                resultado.getContent().stream().map(this::convertirResumen).toList();
+        return new PaginaResponse<>(
+                contenido,
+                resultado.getNumber(),
+                resultado.getSize(),
+                resultado.getTotalElements(),
+                resultado.getTotalPages());
+    }
+
+    @Transactional(readOnly = true)
+    public PedidoResponse consultarPedidoAdministracion(Long pedidoId) {
+        Pedido pedido =
+                pedidos.buscarDetalleAdministrativo(pedidoId)
                         .orElseThrow(PedidoService::pedidoNoEncontrado);
         return convertirRespuesta(pedido);
     }
@@ -207,6 +266,7 @@ public class PedidoService {
                 pedido.getId(),
                 pedido.getCodigo(),
                 pedido.getEstado(),
+                convertirCliente(pedido.getCliente()),
                 detalles,
                 pedido.getSubtotal(),
                 pedido.getTotal(),
@@ -216,6 +276,39 @@ public class PedidoService {
                 pedido.getHoraEntrega(),
                 pedido.getNotas(),
                 pedido.getCreadoEn());
+    }
+
+    private PedidoResumenResponse convertirResumen(Pedido pedido) {
+        return new PedidoResumenResponse(
+                pedido.getId(),
+                pedido.getCodigo(),
+                pedido.getEstado(),
+                convertirCliente(pedido.getCliente()),
+                pedido.getConjuntoResidencial(),
+                pedido.getApartamento(),
+                pedido.getFechaEntrega(),
+                pedido.getHoraEntrega(),
+                pedido.getTotal(),
+                pedido.getCreadoEn());
+    }
+
+    private ClientePedidoResponse convertirCliente(Usuario cliente) {
+        return new ClientePedidoResponse(
+                cliente.getId(), cliente.getNombre(), cliente.getTelefono());
+    }
+
+    private void validarPaginacionYRango(
+            LocalDate fechaDesde, LocalDate fechaHasta, int pagina, int tamano) {
+        if (pagina < 0 || tamano < 1 || tamano > 100) {
+            throw new ApiException(
+                    CodigoError.DATOS_INVALIDOS,
+                    "La página debe ser positiva y el tamaño debe estar entre 1 y 100");
+        }
+        if (fechaDesde != null && fechaHasta != null && fechaDesde.isAfter(fechaHasta)) {
+            throw new ApiException(
+                    CodigoError.DATOS_INVALIDOS,
+                    "La fecha inicial no puede ser posterior a la fecha final");
+        }
     }
 
     private String generarCodigo(Long pedidoId) {

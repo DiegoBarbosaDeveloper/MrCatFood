@@ -80,10 +80,10 @@ class SeguridadTest {
     }
 
     @Test
-    void adminEnRutaAdminPasaLaSeguridad() throws Exception {
-        // No hay controlador todavía: 404 demuestra que la seguridad lo dejó pasar.
+    void adminEnRutaAdminPuedeConsultarPedidos() throws Exception {
         mvc.perform(get("/api/admin/pedidos").header("Authorization", "Bearer " + tokenAdmin))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.contenido").isArray());
     }
 
     @Test

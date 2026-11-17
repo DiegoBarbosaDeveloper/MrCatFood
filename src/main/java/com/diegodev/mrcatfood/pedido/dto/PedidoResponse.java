@@ -11,6 +11,7 @@ public record PedidoResponse(
         Long id,
         String codigo,
         EstadoPedido estado,
+        ClientePedidoResponse cliente,
         List<DetalleResponse> detalles,
         BigDecimal subtotal,
         BigDecimal total,
