@@ -1,5 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import * as Clipboard from "expo-clipboard";
+import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -10,6 +13,7 @@ import {
 } from "react-native";
 import { ErrorHttp } from "../../src/api/clienteHttp";
 import { pedidosApi } from "../../src/api/pedidosApi";
+import { whatsappApi } from "../../src/api/whatsappApi";
 import {
   formatearEstadoPedido,
   formatearFechaEntrega,
@@ -26,6 +30,33 @@ export default function DetallePedido() {
     queryFn: () => pedidosApi.consultar(pedidoId),
     enabled: identificadorValido,
   });
+  const [enlaceFallback, setEnlaceFallback] = useState<string | null>(null);
+  const [enlaceCopiado, setEnlaceCopiado] = useState(false);
+  const enlaceWhatsApp = useMutation({
+    mutationFn: () => whatsappApi.generarEnlace(pedidoId),
+    onSuccess: async ({ enlace }) => {
+      try {
+        await Linking.openURL(enlace);
+        setEnlaceFallback(null);
+      } catch {
+        setEnlaceFallback(enlace);
+      }
+    },
+  });
+
+  const enviarPorWhatsApp = () => {
+    setEnlaceFallback(null);
+    setEnlaceCopiado(false);
+    enlaceWhatsApp.mutate();
+  };
+
+  const copiarEnlace = async () => {
+    if (!enlaceFallback) {
+      return;
+    }
+    await Clipboard.setStringAsync(enlaceFallback);
+    setEnlaceCopiado(true);
+  };
 
   if (!identificadorValido) {
     return (
@@ -104,6 +135,48 @@ export default function DetallePedido() {
         <Text style={estilos.subtitulo}>Total</Text>
         <Text style={estilos.total}>{formatearPrecio(detalle.total)}</Text>
       </View>
+
+      {detalle.estado !== "CANCELADO" ? (
+        <View style={estilos.seccion}>
+          <Text style={estilos.subtitulo}>Enviar a la propietaria</Text>
+          <Pressable
+            accessibilityRole="button"
+            disabled={enlaceWhatsApp.isPending}
+            onPress={enviarPorWhatsApp}
+            style={[estilos.botonPrincipal, enlaceWhatsApp.isPending && estilos.botonDeshabilitado]}
+          >
+            <Text style={estilos.textoBoton}>
+              {enlaceWhatsApp.isPending ? "Generando enlace…" : "Enviar por WhatsApp"}
+            </Text>
+          </Pressable>
+          {enlaceWhatsApp.isError ? (
+            <Text accessibilityLiveRegion="polite" style={estilos.error}>
+              No se pudo generar el enlace. Inténtalo de nuevo.
+            </Text>
+          ) : null}
+          {enlaceFallback ? (
+            <View style={estilos.respaldo}>
+              <Text style={estilos.textoSecundario}>
+                No se pudo abrir WhatsApp. Copia el enlace y pégalo en el navegador.
+              </Text>
+              <Text selectable style={estilos.enlace}>
+                {enlaceFallback}
+              </Text>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => {
+                  void copiarEnlace();
+                }}
+                style={estilos.botonSecundario}
+              >
+                <Text style={estilos.textoBotonSecundario}>
+                  {enlaceCopiado ? "Enlace copiado" : "Copiar enlace"}
+                </Text>
+              </Pressable>
+            </View>
+          ) : null}
+        </View>
+      ) : null}
     </ScrollView>
   );
 }
@@ -154,4 +227,17 @@ const estilos = StyleSheet.create({
     paddingHorizontal: 18,
   },
   textoBoton: { color: "#fff", fontWeight: "700" },
+  botonDeshabilitado: { opacity: 0.6 },
+  respaldo: { gap: 10 },
+  enlace: { color: "#075985", fontSize: 12 },
+  botonSecundario: {
+    alignItems: "center",
+    borderColor: "#0a7ea4",
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 44,
+    paddingHorizontal: 18,
+  },
+  textoBotonSecundario: { color: "#0a7ea4", fontWeight: "700" },
 });

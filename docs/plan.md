@@ -243,6 +243,7 @@ Aislamiento: `READ_COMMITTED` (por defecto de PostgreSQL), suficiente porque la 
 | `JWT_EXPIRACION_MINUTOS` | Vigencia | No (120) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Cuenta única de la administradora | Sí |
 | `WHATSAPP_NUMERO` | Número de la propietaria | Sí |
+| `CORS_ORIGENES_PERMITIDOS` | Orígenes web autorizados, separados por comas | No (`http://localhost:8081`) |
 | `PEDIDOS_HORARIO_INICIO`, `PEDIDOS_HORARIO_FIN` | Horario de recepción | No |
 | `PEDIDOS_ENTREGA_INICIO`, `PEDIDOS_ENTREGA_FIN` | Ventana de entrega | No |
 | `PEDIDOS_ZONA` | Zona horaria | No (`America/Bogota`) |
@@ -262,8 +263,9 @@ Coincide con los valores por defecto de `.env.example` (`127.0.0.1:5432/mydataba
 ## 11. Mensaje y enlace de WhatsApp
 
 - `MensajePedidoFormatter` construye el texto con código, nombre y teléfono del cliente, conjunto y apartamento, fecha y hora, notas, líneas (`cantidad × producto — precio`) y total.
+- Fecha y hora en formato de 12 h: `17/11/2026 a las 12:30 p. m.`; sin notas se imprime `Notas: Sin notas`.
 - Formato de moneda: `$ 12.500` con separador de miles y sin decimales cuando son cero.
-- `WhatsAppService` genera `https://wa.me/{numero}?text={mensaje}` usando `URLEncoder.encode(mensaje, UTF_8)`; el número se normaliza sin `+`, espacios ni guiones.
+- `WhatsAppService` genera `https://wa.me/{numero}?text={mensaje}` usando `URLEncoder.encode(mensaje, UTF_8)` y reemplaza `+` por `%20`; el número se normaliza sin `+`, espacios ni guiones.
 - Si el pedido no pertenece al cliente autenticado → 404.
 - El envío lo hace el cliente; el backend no llama a la API de WhatsApp (RF-09).
 
