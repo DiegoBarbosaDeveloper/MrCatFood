@@ -3,17 +3,11 @@ import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native";
-import { z } from "zod";
 import { useSesion } from "../../src/funcionalidades/sesion/contextoSesion";
-
-const esquema = z.object({
-  nombre: z.string().min(2, "Nombre muy corto"),
-  email: z.string().email("Correo inválido"),
-  telefono: z.string().regex(/^[0-9]{7,15}$/, "Entre 7 y 15 dígitos"),
-  password: z.string().min(8, "Mínimo 8 caracteres"),
-});
-
-type Formulario = z.infer<typeof esquema>;
+import {
+  esquemaRegistro as esquema,
+  type FormularioRegistro as Formulario,
+} from "../../src/validacion/esquemasFormularios";
 
 export default function Registro() {
   const { registrarse } = useSesion();

@@ -11,26 +11,12 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { z } from "zod";
 import { pedidosApi } from "../../src/api/pedidosApi";
 import { useCarrito } from "../../src/funcionalidades/carrito/tiendaCarrito";
-
-const esquemaEntrega = z.object({
-  fechaEntrega: z
-    .string()
-    .trim()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Usa el formato AAAA-MM-DD")
-    .refine((fecha) => !Number.isNaN(new Date(`${fecha}T00:00:00-05:00`).getTime()), {
-      message: "Ingresa una fecha válida",
-    }),
-  horaEntrega: z
-    .string()
-    .trim()
-    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Usa el formato HH:mm"),
-  notas: z.string().max(500, "Las notas deben tener máximo 500 caracteres"),
-});
-
-type FormularioEntrega = z.infer<typeof esquemaEntrega>;
+import {
+  esquemaEntrega,
+  type FormularioEntrega,
+} from "../../src/validacion/esquemasFormularios";
 
 export default function Entrega() {
   const items = useCarrito((estado) => estado.items);
