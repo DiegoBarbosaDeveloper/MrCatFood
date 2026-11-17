@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,4 +46,21 @@ public class DetallePedido {
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal subtotal;
+
+    public DetallePedido(
+            Pedido pedido,
+            Producto producto,
+            String nombreProducto,
+            BigDecimal precioUnitario,
+            Integer cantidad) {
+        this.pedido = pedido;
+        this.producto = producto;
+        this.nombreProducto = nombreProducto;
+        this.precioUnitario = precioUnitario.setScale(2, RoundingMode.HALF_UP);
+        this.cantidad = cantidad;
+        this.subtotal =
+                this.precioUnitario
+                        .multiply(BigDecimal.valueOf(cantidad))
+                        .setScale(2, RoundingMode.HALF_UP);
+    }
 }
