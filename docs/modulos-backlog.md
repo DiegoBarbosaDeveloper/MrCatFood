@@ -22,11 +22,11 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 3/3 | ☑ Hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 7/7 | ☑ Hecho |
-| M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 2/11 | ◐ En proceso |
+| M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 3/11 | ◐ En proceso |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **18/57 (32 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **19/57 (33 %)** | ◐ En proceso |
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
@@ -322,7 +322,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 |---|---|---|---|---|
 | M5.1 | Migración de pedidos y detalles | Must | Tablas con copia de nombre, precio, conjunto y apartamento | ☑ Hecho |
 | M5.2 | Validación de horarios y de entrega | Must | Fuera de horario → 422 con el mensaje del horario válido | ☑ Hecho |
-| M5.3 | Previsualización del pedido | Must | `POST /api/pedidos/preview` devuelve totales **sin** guardar nada | ☐ No hecho |
+| M5.3 | Previsualización del pedido | Must | `POST /api/pedidos/preview` devuelve totales **sin** guardar nada | ☑ Hecho |
 | M5.4 | Registro del pedido y descuento de stock | Must | `POST /api/pedidos` descuenta stock; stock insuficiente → 409 | ☐ No hecho |
 | M5.5 | Consulta de pedidos del cliente | Must | `GET /api/pedidos/mios`; un pedido ajeno → 404 | ☐ No hecho |
 | M5.6 | Listado global con filtros (admin) | Must | Filtros por estado y rango de fechas, paginado | ☐ No hecho |
