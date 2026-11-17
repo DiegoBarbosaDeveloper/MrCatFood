@@ -57,3 +57,32 @@ export interface PedidoResponse extends PrevisualizacionPedidoResponse {
   cliente: ClientePedidoResponse;
   creadoEn: string;
 }
+
+export interface PedidoResumenResponse {
+  id: number;
+  codigo: string;
+  estado: EstadoPedido;
+  cliente: ClientePedidoResponse;
+  conjuntoResidencial: string;
+  apartamento: string;
+  fechaEntrega: string;
+  horaEntrega: string;
+  total: number;
+  creadoEn: string;
+}
+
+export interface PaginaResponse<T> {
+  contenido: T[];
+  pagina: number;
+  tamano: number;
+  totalElementos: number;
+  totalPaginas: number;
+}
+
+export interface FiltrosPedidosAdmin {
+  estado?: EstadoPedido;
+  fechaDesde?: string;
+  fechaHasta?: string;
+  pagina: number;
+  tamano?: number;
+}
