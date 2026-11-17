@@ -171,6 +171,24 @@ public class PedidoService {
         return convertirRespuesta(pedido);
     }
 
+    @Transactional
+    public PedidoResponse cambiarEstadoPedido(Long pedidoId, EstadoPedido nuevoEstado) {
+        Pedido pedido =
+                pedidos.buscarDetalleAdministrativo(pedidoId)
+                        .orElseThrow(PedidoService::pedidoNoEncontrado);
+        if (!pedido.getEstado().permiteTransicionA(nuevoEstado)) {
+            throw new ApiException(
+                    CodigoError.TRANSICION_INVALIDA,
+                    "No se puede cambiar un pedido de " + pedido.getEstado() + " a " + nuevoEstado);
+        }
+        if (nuevoEstado == EstadoPedido.CANCELADO) {
+            devolverInventario(pedido);
+        }
+        pedido.cambiarEstado(nuevoEstado);
+        pedidos.flush();
+        return convertirRespuesta(pedido);
+    }
+
     private PrevisualizacionPedidoResponse calcularPrevisualizacion(
             Long clienteId, PrevisualizarPedidoRequest solicitud, boolean validarStock) {
         validadorFechaEntrega.validarFechaEntrega(
@@ -245,6 +263,14 @@ public class PedidoService {
                     CodigoError.STOCK_INSUFICIENTE,
                     "No hay stock suficiente de " + producto.getNombre(),
                     Map.of("productos", "Cantidad superior a la disponible"));
+        }
+    }
+
+    private void devolverInventario(Pedido pedido) {
+        for (DetallePedido detalle : pedido.getDetalles()) {
+            if (detalle.getProducto() != null) {
+                productos.devolverStock(detalle.getProducto().getId(), detalle.getCantidad());
+            }
         }
     }
 
