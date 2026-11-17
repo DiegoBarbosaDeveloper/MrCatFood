@@ -28,3 +28,14 @@ export function formatearEstadoPedido(estado: EstadoPedido): string {
   };
   return nombres[estado];
 }
+
+export function obtenerTransicionesPedido(estado: EstadoPedido): EstadoPedido[] {
+  const transiciones: Record<EstadoPedido, EstadoPedido[]> = {
+    PENDIENTE: ["CONFIRMADO", "CANCELADO"],
+    CONFIRMADO: ["EN_PREPARACION", "CANCELADO"],
+    EN_PREPARACION: ["ENTREGADO", "CANCELADO"],
+    ENTREGADO: [],
+    CANCELADO: [],
+  };
+  return transiciones[estado];
+}
