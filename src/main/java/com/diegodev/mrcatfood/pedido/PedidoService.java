@@ -97,6 +97,21 @@ public class PedidoService {
         return convertirRespuesta(guardado);
     }
 
+    @Transactional(readOnly = true)
+    public List<PedidoResponse> consultarPedidosCliente(Long clienteId) {
+        return pedidos.buscarTodosDelCliente(clienteId).stream()
+                .map(this::convertirRespuesta)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PedidoResponse consultarPedidoCliente(Long clienteId, Long pedidoId) {
+        Pedido pedido =
+                pedidos.buscarPorIdYCliente(pedidoId, clienteId)
+                        .orElseThrow(PedidoService::pedidoNoEncontrado);
+        return convertirRespuesta(pedido);
+    }
+
     private PrevisualizacionPedidoResponse calcularPrevisualizacion(
             Long clienteId, PrevisualizarPedidoRequest solicitud, boolean validarStock) {
         validadorFechaEntrega.validarFechaEntrega(
@@ -250,5 +265,10 @@ public class PedidoService {
     private static ApiException clienteNoEncontrado() {
         return new ApiException(
                 CodigoError.RECURSO_NO_ENCONTRADO, "El cliente autenticado no existe");
+    }
+
+    private static ApiException pedidoNoEncontrado() {
+        return new ApiException(
+                CodigoError.RECURSO_NO_ENCONTRADO, "El pedido solicitado no existe");
     }
 }

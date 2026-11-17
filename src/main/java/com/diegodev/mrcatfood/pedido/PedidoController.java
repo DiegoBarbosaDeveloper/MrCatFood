@@ -7,9 +7,12 @@ import com.diegodev.mrcatfood.pedido.dto.PrevisualizarPedidoRequest;
 import com.diegodev.mrcatfood.seguridad.UsuarioAutenticado;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,5 +44,17 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(URI.create("/api/pedidos/" + pedido.id()))
                 .body(pedido);
+    }
+
+    @GetMapping("/mios")
+    public ResponseEntity<List<PedidoResponse>> consultarPedidosPropios(
+            @AuthenticationPrincipal UsuarioAutenticado principal) {
+        return ResponseEntity.ok(servicio.consultarPedidosCliente(principal.id()));
+    }
+
+    @GetMapping("/{pedidoId}")
+    public ResponseEntity<PedidoResponse> consultarPedidoPropio(
+            @AuthenticationPrincipal UsuarioAutenticado principal, @PathVariable Long pedidoId) {
+        return ResponseEntity.ok(servicio.consultarPedidoCliente(principal.id(), pedidoId));
     }
 }
