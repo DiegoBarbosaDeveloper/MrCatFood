@@ -18,10 +18,10 @@ Lo que **no** cubre: pantallas de la aplicación móvil (ver `docs/plan-frontend
 
 | Elemento | Versión | Nota |
 |---|---|---|
-| Java | 21 | Bytecode 21 compilado con el JDK 25 instalado mediante `options.release = 21` (M2.1) |
+| Java | 21 | *Toolchain* 21 con autoaprovisionamiento (`foojay-resolver`): si la máquina no tiene JDK 21, Gradle lo descarga (M2.1) |
 | Spring Boot | 4.1.1 | Security 7, Jackson 3, Hibernate 7 |
 | Gradle | 9.7.1 | Wrapper incluido |
-| PostgreSQL | 16 | `TIMESTAMPTZ`, `NUMERIC(12,2)`, `BIGSERIAL` |
+| PostgreSQL | 18 | `TIMESTAMPTZ`, `NUMERIC(12,2)`, `BIGSERIAL`; contenedor Podman local 18.6 |
 | Flyway | Según BOM de Boot | Migraciones versionadas |
 | springdoc | 3.1.1 | Swagger UI y esquema Bearer (M8.1) |
 | Testcontainers | 2.0.5 | PostgreSQL efímero para integración |
@@ -90,6 +90,7 @@ com.diegodev.mrcatfood
 └── comun
     ├── ApiException.java             excepción de negocio con código
     ├── ManejadorGlobalErrores.java   @RestControllerAdvice → ProblemDetail
+    ├── RespuestaProblema.java        escritor de errores para filtros y handlers
     └── Paginacion.java               página, tamaño y orden comunes
 ```
 
@@ -99,11 +100,11 @@ Se implementa exactamente el esquema de `docs/modelo-datos.md`:
 
 | Entidad | Notas de implementación |
 |---|---|
-| `Usuario` | `email` único, normalizado a minúsculas; `passwordHash` BCrypt; `rol` como `enum` `CLIENTE`/`ADMIN`; `activo` |
+| `Usuario` | `email` único, normalizado a minúsculas; `passwordHash` BCrypt; `rol` como `enum` `CLIENTE`/`ADMIN`; `activo`; `creadoEn` con `@CreationTimestamp` para no depender del default de PostgreSQL en las pruebas con H2 |
 | `Producto` | `precio` y `stock` como `BigDecimal`/`Integer`; `@Version` para bloqueo optimista; `activo` para baja lógica |
 | `Ingrediente` | `@ManyToOne Producto`; sin catálogo central ni sobrecosto |
 | `Pedido` | Copia de `conjuntoResidencial` y `apartamento`; `fechaEntrega`, `horaEntrega`, `notas`, `subtotal`, `total`; `estado` |
-| `DetallePedido` | Copia de `nombreProducto` y `precioUnitario`; `producto` con `ON DELETE SET NULL`; `cantidad > 0` |
+| `TokenRevocado` | Solo `jti` y `expiraEn`; purga programada de vencidos (HU-02) |
 
 Convenciones:
 
@@ -242,17 +243,29 @@ Aislamiento: `READ_COMMITTED` (por defecto de PostgreSQL), suficiente porque la 
 | `JWT_EXPIRACION_MINUTOS` | Vigencia | No (120) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Cuenta única de la administradora | Sí |
 | `WHATSAPP_NUMERO` | Número de la propietaria | Sí |
+| `CORS_ORIGENES_PERMITIDOS` | Orígenes web autorizados, separados por comas | No (`http://localhost:8081`) |
 | `PEDIDOS_HORARIO_INICIO`, `PEDIDOS_HORARIO_FIN` | Horario de recepción | No |
 | `PEDIDOS_ENTREGA_INICIO`, `PEDIDOS_ENTREGA_FIN` | Ventana de entrega | No |
 | `PEDIDOS_ZONA` | Zona horaria | No (`America/Bogota`) |
 
-Perfiles: `dev` (PostgreSQL local), `test` (Testcontainers) y `prod` (variables de entorno). Ningún secreto se escribe en el repositorio.
+Perfiles: `dev` (PostgreSQL local), `test` (H2 hasta M7.3, luego Testcontainers) y `prod` (variables de entorno). Ningún secreto se escribe en el repositorio: `.env` y `.env.produccion` están ignorados y en permisos `600`; solo se versionan `.env.example` y `.env.produccion.example`, con marcadores.
+
+### 10.1 Base local con Podman
+
+```bash
+podman run -d --name postgres \
+  -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin123 -e POSTGRES_DB=mydatabase \
+  -p 5432:5432 docker.io/library/postgres:18
+```
+
+Coincide con los valores por defecto de `.env.example` (`127.0.0.1:5432/mydatabase`, usuario `admin`). Producción usa Supabase con `DB_URL` en modo sesión (puerto 5432), porque el *pooler* en modo transacción (6543) rompe Flyway.
 
 ## 11. Mensaje y enlace de WhatsApp
 
 - `MensajePedidoFormatter` construye el texto con código, nombre y teléfono del cliente, conjunto y apartamento, fecha y hora, notas, líneas (`cantidad × producto — precio`) y total.
+- Fecha y hora en formato de 12 h: `17/11/2026 a las 12:30 p. m.`; sin notas se imprime `Notas: Sin notas`.
 - Formato de moneda: `$ 12.500` con separador de miles y sin decimales cuando son cero.
-- `WhatsAppService` genera `https://wa.me/{numero}?text={mensaje}` usando `URLEncoder.encode(mensaje, UTF_8)`; el número se normaliza sin `+`, espacios ni guiones.
+- `WhatsAppService` genera `https://wa.me/{numero}?text={mensaje}` usando `URLEncoder.encode(mensaje, UTF_8)` y reemplaza `+` por `%20`; el número se normaliza sin `+`, espacios ni guiones.
 - Si el pedido no pertenece al cliente autenticado → 404.
 - El envío lo hace el cliente; el backend no llama a la API de WhatsApp (RF-09).
 
@@ -263,6 +276,8 @@ Perfiles: `dev` (PostgreSQL local), `test` (Testcontainers) y `prod` (variables 
 | `V1__crea_usuario.sql` | M2.2 | `usuario`, índice `LOWER(email)` y `token_revocado` |
 | `V2__crea_producto.sql` | M4.1 | `producto`, `producto_ingrediente` y datos de ejemplo |
 | `V3__crea_pedido.sql` | M5.1 | `pedido`, `detalle_pedido`, índices y checks |
+
+Flyway entra con `spring-boot-starter-flyway`: en Spring Boot 4 la autoconfiguración vive en un módulo aparte y `flyway-core` por sí solo no la activa.
 
 Reglas: nombres `V{n}__descripcion_en_snake_case.sql`; una migración por tarea que toque el esquema; nunca se edita una migración ya aplicada; `stock >= 0` y `precio >= 0` se garantizan con `CHECK` además de en el servicio.
 

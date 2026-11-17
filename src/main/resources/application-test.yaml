@@ -1,0 +1,23 @@
+# Perfil de pruebas: base en memoria, sin depender de PostgreSQL ni de .env.
+spring:
+  datasource:
+    url: jdbc:h2:mem:mrcatfood;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+
+seguridad:
+  jwt:
+    secreto: clave-de-pruebas-con-mas-de-32-bytes-0123456789
+    expiracion-minutos: 120
+
+whatsapp:
+  numero: "573001234567"
+
+ADMIN_EMAIL: admin-test@mrcatfood.local
+ADMIN_PASSWORD: clave-admin-de-prueba

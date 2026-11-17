@@ -157,7 +157,7 @@ Reglas de interfaz:
 2. Recibe `{ "enlace": "https://wa.me/57...?text=..." }`.
 3. Abre con `Linking.openURL(enlace)`.
 4. Si no hay aplicación instalada, el mismo enlace abre WhatsApp Web (HU-16).
-5. Si `Linking` falla, se muestra el enlace con opción de copiarlo.
+5. Si `Linking` falla, se muestra el enlace con un botón «Copiar enlace» usando `expo-clipboard`.
 
 El número de la propietaria nunca se escribe en la app: lo entrega el backend desde `WHATSAPP_NUMERO`.
 
@@ -207,7 +207,7 @@ Perfiles: desarrollo apunta al backend local y web permite CORS del origen de Ex
 |---|---|
 | Diferencias entre Expo SDK y React Native | Fijar versiones con `expo install` y no actualizar por separado |
 | `expo-secure-store` no existe en web | Adaptador con `localStorage` y aviso en la documentación |
-| CORS bloquea la versión web en desarrollo | Configurar orígenes permitidos en el backend y documentarlo en M8.2 |
+| CORS bloquea la versión web en desarrollo | Orígenes permitidos por `CORS_ORIGENES_PERMITIDOS` (M6.5) |
 | Enlaces `wa.me` con acentos o saltos de línea | Los codifica el backend; la app solo abre la URL |
 | Sin conexión al confirmar | Deshabilitar el botón durante el envío y mostrar error con reintento manual |
 

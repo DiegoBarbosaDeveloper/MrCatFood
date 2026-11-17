@@ -19,18 +19,18 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | # | Módulo | Requisitos | Tareas | Progreso | Estado |
 |---|---|---|---|---|---|
 | M1 | Levantamiento y análisis de requisitos | Todos | 6 | 6/6 | ☑ Hecho |
-| M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ☐ No hecho |
-| M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 0/3 | ☐ No hecho |
-| M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 0/7 | ☐ No hecho |
-| M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 0/11 | ☐ No hecho |
-| M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
+| M2 | Registro de clientes | RF-01, RNF-01 | 10 | 10/10 | ☑ Hecho |
+| M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 3/3 | ☑ Hecho |
+| M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 7/7 | ☑ Hecho |
+| M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 11/11 | ☑ Hecho |
+| M6 | Notificación mediante WhatsApp | RF-09 | 5 | 5/5 | ☑ Hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **6/57 (11 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **42/57 (74 %)** | ◐ En proceso |
 
-**Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
+**Cerrado en este ciclo:** M1 a M5 fusionados en `dev`. M2 quedó cerrado con sus 10 tareas fusionadas mediante los PR #11 a #16; `./gradlew build` en verde (Spotless + pruebas). M6 implementado en las ramas `M6.1`–`M6.5` con `./gradlew build` (115 pruebas) y lint/typecheck móvil en verde.
 
-**En proceso ahora:** M2.1 Andamiaje (dependencias, Spotless, `.editorconfig`). El módulo M1 queda cerrado cuando sus PR se fusionen en `dev`.
+**En proceso ahora:** ninguno. El siguiente módulo es M7 (pruebas).
 
 **Reglas del tablero**
 
@@ -268,83 +268,83 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 2 — Registro de clientes
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-01, RNF-01 · **Depende de:** M1
+**Estado:** ☑ Hecho · **Requisitos:** RF-01, RNF-01 · **Depende de:** M1
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ☐ No hecho |
-| M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ☐ No hecho |
-| M2.3 | Entidad `Usuario`, roles y repositorio | Must | `Usuario` mapeada y validada contra el esquema | ☐ No hecho |
-| M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ☐ No hecho |
-| M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ☐ No hecho |
-| M2.6 | Cuenta de la administradora al arrancar | Must | Arranca dos veces sin duplicar el admin; contraseña con BCrypt | ☐ No hecho |
-| M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ☐ No hecho |
-| M2.8 | Usuario autenticado actual | Must | `GET /api/auth/yo` devuelve los datos del token, nunca los de otro | ☐ No hecho |
-| M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ☐ No hecho |
-| M2.10 | Pantalla de acceso de la administradora (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ☐ No hecho |
+| M2.1 | Andamiaje: dependencias, Spotless, `.editorconfig` | Must | `spotlessCheck` pasa y falla si se desformatea un archivo | ☑ Hecho |
+| M2.2 | Migraciones Flyway y datasource por esquema | Must | La app arranca; `flyway_schema_history` con las versiones aplicadas; **build en verde** | ☑ Hecho |
+| M2.3 | Entidad `Usuario`, roles y repositorio | Must | `Usuario` mapeada y validada contra el esquema | ☑ Hecho |
+| M2.4 | Emisión y validación del JWT | Must | Token firmado y verificado; token alterado → 401 | ☑ Hecho |
+| M2.5 | Reglas de seguridad por rol | Must | `/api/admin/**` exige rol ADMIN; el resto de `/api/**` exige token | ☑ Hecho |
+| M2.6 | Cuenta de la administradora al arrancar | Must | Arranca dos veces sin duplicar el admin; contraseña con BCrypt | ☑ Hecho |
+| M2.7 | Endpoints de registro e inicio de sesión | Must | `POST /api/auth/registro` → 201 + token; email duplicado → 409 | ☑ Hecho |
+| M2.8 | Usuario autenticado actual | Must | `GET /api/auth/yo` devuelve los datos del token, nunca los de otro | ☑ Hecho |
+| M2.9 | Manejo global de errores | Must | Errores en `ProblemDetail`; ningún 500 por datos inválidos | ☑ Hecho |
+| M2.10 | Pantalla de acceso y registro (móvil) | Must | Entra al panel con su usuario y clave; con rol cliente recibe 403 | ☑ Hecho |
 
 **Ready:** M1 cerrado; contrato de registro y login definido con ejemplos; regla de la cuenta admin decidida (cuenta única).
 **Done:** **prueba de escalada de privilegios**: un registro con `"rol":"ADMIN"` en el cuerpo devuelve 400 y el usuario queda `CLIENTE`; contraseña nunca en texto plano ni en el repositorio.
 
 ## Módulo 3 — Ubicación: conjunto y apartamento
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-02 · **Depende de:** M2
+**Estado:** ☑ Hecho · **Requisitos:** RF-02 · **Depende de:** M2
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M3.1 | Endpoints de perfil y de ubicación | Must | `PUT /api/usuarios/yo/ubicacion` guarda y devuelve los datos | ☐ No hecho |
-| M3.2 | Validación y copia de los datos | Must | Campos vacíos → 400; el pedido guarda copia de los valores del momento | ☐ No hecho |
-| M3.3 | Pantalla Mi ubicación (móvil) | Must | El cliente guarda y vuelve a ver conjunto y apartamento | ☐ No hecho |
+| M3.1 | Endpoints de perfil y de ubicación | Must | `PUT /api/usuarios/yo/ubicacion` guarda y devuelve los datos | ☑ Hecho |
+| M3.2 | Validación y copia de los datos | Must | Campos vacíos → 400; el pedido guarda copia de los valores del momento | ☑ Hecho |
+| M3.3 | Pantalla Mi ubicación (móvil) | Must | El cliente guarda y vuelve a ver conjunto y apartamento | ☑ Hecho |
 
 **Done:** un cliente no puede modificar la ubicación de otro; los pedidos anteriores conservan la ubicación original (RNF-04).
 
 ## Módulo 4 — Catálogo de sándwiches
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-03, RF-04, RF-05 · **Depende de:** M2
+**Estado:** ☑ Hecho · **Requisitos:** RF-03, RF-04, RF-05 · **Depende de:** M2
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M4.1 | Migración de productos, ingredientes y datos de ejemplo | Must | Tablas creadas y catálogo de ejemplo cargado | ☐ No hecho |
-| M4.2 | Catálogo público | Must | `GET /api/productos` devuelve solo activos con los datos del RF-04 | ☐ No hecho |
-| M4.3 | Detalle de producto | Must | `GET /api/productos/{id}`; inexistente o inactivo → 404 | ☐ No hecho |
-| M4.4 | Alta y edición de productos (admin) | Must | Crear y editar con rol ADMIN; con rol CLIENTE → 403 | ☐ No hecho |
-| M4.5 | Actualización de precio y disponibilidad | Must | El cambio se refleja en el catálogo público en la siguiente consulta | ☐ No hecho |
-| M4.6 | Pantallas de catálogo y detalle (móvil) | Must | Lista con precio, ingredientes y badge de disponibilidad | ☐ No hecho |
-| M4.7 | Pantallas admin de productos (móvil) | Must | La administradora edita precio, stock e ingredientes desde el celular | ☐ No hecho |
+| M4.1 | Migración de productos, ingredientes y datos de ejemplo | Must | Tablas creadas y catálogo de ejemplo cargado | ☑ Hecho |
+| M4.2 | Catálogo público | Must | `GET /api/productos` devuelve solo activos con los datos del RF-04 | ☑ Hecho |
+| M4.3 | Detalle de producto | Must | `GET /api/productos/{id}`; inexistente o inactivo → 404 | ☑ Hecho |
+| M4.4 | Alta y edición de productos (admin) | Must | Crear y editar con rol ADMIN; con rol CLIENTE → 403 | ☑ Hecho |
+| M4.5 | Actualización de precio y disponibilidad | Must | El cambio se refleja en el catálogo público en la siguiente consulta | ☑ Hecho |
+| M4.6 | Pantallas de catálogo y detalle (móvil) | Must | Lista con precio, ingredientes y badge de disponibilidad | ☑ Hecho |
+| M4.7 | Pantallas admin de productos (móvil) | Must | La administradora edita precio, stock e ingredientes desde el celular | ☑ Hecho |
 
 **Done:** producto inactivo nunca aparece en el catálogo; stock en cero muestra "Agotado"; `stock >= 0` y `precio >= 0` garantizados por el esquema.
 
 ## Módulo 5 — Gestión de pedidos
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 · **Depende de:** M3 y M4
+**Estado:** ☑ Hecho · **Requisitos:** RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 · **Depende de:** M3 y M4
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M5.1 | Migración de pedidos y detalles | Must | Tablas con copia de nombre, precio, conjunto y apartamento | ☐ No hecho |
-| M5.2 | Validación de horarios y de entrega | Must | Fuera de horario → 422 con el mensaje del horario válido | ☐ No hecho |
-| M5.3 | Previsualización del pedido | Must | `POST /api/pedidos/preview` devuelve totales **sin** guardar nada | ☐ No hecho |
-| M5.4 | Registro del pedido y descuento de stock | Must | `POST /api/pedidos` descuenta stock; stock insuficiente → 409 | ☐ No hecho |
-| M5.5 | Consulta de pedidos del cliente | Must | `GET /api/pedidos/mios`; un pedido ajeno → 404 | ☐ No hecho |
-| M5.6 | Listado global con filtros (admin) | Must | Filtros por estado y rango de fechas, paginado | ☐ No hecho |
-| M5.7 | Cambio de estado con máquina de estados | Must | Transición válida → 200; inválida → 422; cancelar devuelve el stock | ☐ No hecho |
-| M5.8 | Carrito (móvil) | Must | Cantidades editables y subtotal correcto | ☐ No hecho |
-| M5.9 | Pantallas de entrega y confirmación (móvil) | Must | Fecha, hora y notas; el resumen muestra todo antes de confirmar | ☐ No hecho |
-| M5.10 | Pantallas de consulta de pedidos (móvil) | Must | El cliente ve sus pedidos y el estado actual | ☐ No hecho |
-| M5.11 | Pantallas admin de pedidos (móvil) | Must | La administradora filtra, abre y cambia el estado de un pedido | ☐ No hecho |
+| M5.1 | Migración de pedidos y detalles | Must | Tablas con copia de nombre, precio, conjunto y apartamento | ☑ Hecho |
+| M5.2 | Validación de horarios y de entrega | Must | Fuera de horario → 422 con el mensaje del horario válido | ☑ Hecho |
+| M5.3 | Previsualización del pedido | Must | `POST /api/pedidos/preview` devuelve totales **sin** guardar nada | ☑ Hecho |
+| M5.4 | Registro del pedido y descuento de stock | Must | `POST /api/pedidos` descuenta stock; stock insuficiente → 409 | ☑ Hecho |
+| M5.5 | Consulta de pedidos del cliente | Must | `GET /api/pedidos/mios`; un pedido ajeno → 404 | ☑ Hecho |
+| M5.6 | Listado global con filtros (admin) | Must | Filtros por estado y rango de fechas, paginado | ☑ Hecho |
+| M5.7 | Cambio de estado con máquina de estados | Must | Transición válida → 200; inválida → 422; cancelar devuelve el stock | ☑ Hecho |
+| M5.8 | Carrito (móvil) | Must | Cantidades editables y subtotal correcto | ☑ Hecho |
+| M5.9 | Pantallas de entrega y confirmación (móvil) | Must | Fecha, hora y notas; el resumen muestra todo antes de confirmar | ☑ Hecho |
+| M5.10 | Pantallas de consulta de pedidos (móvil) | Must | El cliente ve sus pedidos y el estado actual | ☑ Hecho |
+| M5.11 | Pantallas admin de pedidos (móvil) | Must | La administradora filtra, abre y cambia el estado de un pedido | ☑ Hecho |
 
 **Done:** dos pedidos simultáneos sobre el último sándwich → solo uno se confirma; el pedido guarda copia del precio aunque el admin lo cambie; ningún pedido se crea fuera de horario.
 
 ## Módulo 6 — Notificación mediante WhatsApp
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-09 · **Depende de:** M5
+**Estado:** ☑ Hecho · **Requisitos:** RF-09 · **Depende de:** M5
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M6.1 | Configuración del número de la propietaria | Must | Número configurable por variable de entorno, no en el código | ☐ No hecho |
-| M6.2 | Formateador del mensaje | Must | Mensaje con código, cliente, ubicación, fecha/hora, ítems y total | ☐ No hecho |
-| M6.3 | Generación del enlace `wa.me` | Must | URL válida con acentos, espacios y saltos de línea codificados | ☐ No hecho |
-| M6.4 | Endpoint del enlace | Must | `POST /api/pedidos/{id}/whatsapp`; pedido ajeno → 404 | ☐ No hecho |
-| M6.5 | Botón de envío en la app (móvil) | Must | Abre WhatsApp con el mensaje listo; fallback si no hay app instalada | ☐ No hecho |
+| M6.1 | Configuración del número de la propietaria | Must | Número configurable por variable de entorno, no en el código | ☑ Hecho |
+| M6.2 | Formateador del mensaje | Must | Mensaje con código, cliente, ubicación, fecha/hora, ítems y total | ☑ Hecho |
+| M6.3 | Generación del enlace `wa.me` | Must | URL válida con acentos, espacios y saltos de línea codificados | ☑ Hecho |
+| M6.4 | Endpoint del enlace | Must | `POST /api/pedidos/{id}/whatsapp`; pedido ajeno → 404 | ☑ Hecho |
+| M6.5 | Botón de envío en la app (móvil) | Must | Abre WhatsApp con el mensaje listo; fallback si no hay app instalada | ☑ Hecho |
 
 **Done:** el enlace abre el chat correcto con el pedido completo; acentos y saltos de línea se ven bien; funciona en Android, iOS y web.
 
@@ -407,7 +407,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 | Riesgo | Estado | Mitigación |
 |---|---|---|
-| `./gradlew build` en rojo: *toolchain* Java 21 ausente (solo hay JDK 25) y datasource sin configurar | **Abierto** | **M2.1** compila con `options.release = 21`; **M2.2** configura el datasource. Documentado en `docs/especificacion-requisitos.md` §9 |
+| ~~`./gradlew build` en rojo: *toolchain* Java 21 ausente y datasource sin configurar~~ | **Cerrado en M2.1** | `foojay-resolver` descarga el JDK 21 y el `build` queda en verde; **M2.2** conecta el datasource real. Documentado en `docs/especificacion-requisitos.md` §9 |
 | Spring Boot 4 es muy reciente (Security 7, Jackson 3, Hibernate 7) | Abierto | No usar APIs directos de Jackson; DSL de lambda en Security |
 | springdoc 3.1.1 es la primera línea para Boot 4 | Abierto | Si falla, la API sigue funcionando: solo se pierde Swagger |
 | Testcontainers 2.0.5 cambió de coordenadas | Abierto | Plan B con H2 en modo PostgreSQL |

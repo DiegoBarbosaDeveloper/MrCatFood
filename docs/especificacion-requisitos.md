@@ -241,14 +241,14 @@ Estas reglas no fueron pedidas explícitamente, pero son necesarias para que los
 |---|---|
 | Documento completo (RF-01…RF-10, RNF-01…RNF-05) | Correcto |
 | Caracteres no corruptos | Correcto |
-| `./gradlew build` | **En rojo, y no por esta tarea** |
+| `./gradlew build` | No aplica en esta tarea (documental); en verde desde **M2.1** |
 
-**Sobre el build en rojo.** El proyecto no compila todavía por dos causas previas, ambas ajenas a la documentación:
+**Sobre el build.** Cuando se redactó este documento el proyecto no compilaba por dos causas previas, ambas ajenas a la documentación:
 
-1. `build.gradle.kts` declara un *toolchain* de Java 21 y la máquina de desarrollo solo tiene JDK 25, por lo que Gradle falla antes de compilar (`Cannot find a Java installation ... matching: {languageVersion=21}`). Se resuelve en **M2.1** compilando con `options.release = 21` sobre el JDK instalado.
-2. `application.yaml` no configura el `DataSource`, por lo que `MrCatFoodApplicationTests.contextLoads()` falla con `DataSourceBeanCreationException` una vez resuelto el punto anterior. Se resuelve en **M2.2** con las migraciones Flyway y el datasource por variables de entorno.
+1. `build.gradle.kts` declaraba un *toolchain* de Java 21 mientras la máquina de desarrollo solo tenía un JRE 25 sin `javac`, por lo que Gradle fallaba antes de compilar. Se resolvió en **M2.1** con el *toolchain* 21 y autoaprovisionamiento mediante `foojay-resolver`: si no hay JDK 21 local, Gradle lo descarga.
+2. `application.yaml` no configura el `DataSource`. Se resuelve en **M2.2** con las migraciones Flyway y el datasource por variables de entorno; hasta entonces la prueba de contexto usa la base embebida que aporta H2 en el *classpath* de pruebas.
 
-Esta tarea M1.1 es exclusivamente documental y no modifica código ni configuración, por lo que no introduce regresión. El proyecto recuperará el build en verde al cerrar M2.1 y M2.2.
+Estado actual: `./gradlew build` queda en verde desde M2.1.
 
 ## 10. Trazabilidad de esta tarea
 
