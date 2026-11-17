@@ -1,6 +1,8 @@
 package com.diegodev.mrcatfood.pedido;
 
 import com.diegodev.mrcatfood.config.PropiedadesPedido;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.format.DateTimeFormatter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /** Publica los horarios configurados para recepción y entrega. */
 @RestController
 @RequestMapping("/api/configuracion/horario")
+@Tag(name = "Configuración")
 public class ConfiguracionHorarioController {
 
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");
@@ -21,6 +24,7 @@ public class ConfiguracionHorarioController {
     }
 
     @GetMapping
+    @Operation(summary = "Consultar horarios de recepción y entrega")
     public ResponseEntity<HorarioResponse> consultarHorario() {
         return ResponseEntity.ok(
                 new HorarioResponse(
