@@ -11,12 +11,20 @@ export interface ItemCarrito {
   cantidad: number;
 }
 
+export interface EntregaBorrador {
+  fechaEntrega: string;
+  horaEntrega: string;
+  notas: string;
+}
+
 interface EstadoCarrito {
   items: ItemCarrito[];
+  entrega: EntregaBorrador;
   agregarProducto: (producto: ProductoResponse, cantidad?: number) => void;
   actualizarCantidad: (productoId: number, cantidad: number) => void;
   quitarProducto: (productoId: number) => void;
   sincronizarCatalogo: (productos: ProductoResponse[]) => void;
+  actualizarEntrega: (entrega: EntregaBorrador) => void;
   vaciarCarrito: () => void;
 }
 
@@ -28,6 +36,7 @@ export const useCarrito = create<EstadoCarrito>()(
   persist(
     (set) => ({
       items: [],
+      entrega: { fechaEntrega: "", horaEntrega: "", notas: "" },
       agregarProducto: (producto, cantidad = 1) =>
         set((estado) => {
           if (!producto.disponible || producto.stock <= 0) return estado;
@@ -84,7 +93,9 @@ export const useCarrito = create<EstadoCarrito>()(
             }),
           };
         }),
-      vaciarCarrito: () => set({ items: [] }),
+      actualizarEntrega: (entrega) => set({ entrega }),
+      vaciarCarrito: () =>
+        set({ items: [], entrega: { fechaEntrega: "", horaEntrega: "", notas: "" } }),
     }),
     {
       name: "mrcatfood_carrito",
