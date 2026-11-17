@@ -24,13 +24,13 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 7/7 | ☑ Hecho |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 11/11 | ☑ Hecho |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 5/5 | ☑ Hecho |
-| M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
+| M7 | Pruebas | Transversal | 9 | 9/9 | ☑ Hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **42/57 (74 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **51/57 (89 %)** | ◐ En proceso |
 
-**Cerrado en este ciclo:** M1 a M5 fusionados en `dev`. M2 quedó cerrado con sus 10 tareas fusionadas mediante los PR #11 a #16; `./gradlew build` en verde (Spotless + pruebas). M6 implementado en las ramas `M6.1`–`M6.5` con `./gradlew build` (115 pruebas) y lint/typecheck móvil en verde.
+**Cerrado en este ciclo:** M1 a M5 fusionados en `dev`. M2 quedó cerrado con sus 10 tareas fusionadas mediante los PR #11 a #16; `./gradlew build` en verde (Spotless + pruebas). M6 implementado en las ramas `M6.1`–`M6.5` con `./gradlew build` (115 pruebas) y lint/typecheck móvil en verde. M7 implementado en las ramas `M7.1`–`M7.9`: 122 pruebas rápidas, 23 de integración sobre PostgreSQL efímero y 27 de móvil, todas en verde; cobertura y trazabilidad en `docs/reporte-cobertura.md`.
 
-**En proceso ahora:** ninguno. El siguiente módulo es M7 (pruebas).
+**En proceso ahora:** ninguno. El siguiente módulo es M8 (documentación).
 
 **Reglas del tablero**
 
@@ -350,21 +350,21 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 7 — Pruebas
 
-**Estado:** ☐ No hecho · **Requisitos:** transversal (RNF-01, RNF-03, RNF-04) · **Depende de:** M2–M6
+**Estado:** ☑ Hecho · **Requisitos:** transversal (RNF-01, RNF-03, RNF-04) · **Depende de:** M2–M6
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M7.1 | Pruebas del formateador de WhatsApp | Must | Casos con acentos, saltos de línea y total | ☐ No hecho |
-| M7.2 | Pruebas de horario, totales y estados | Must | Bordes exactos del horario; transición inválida detectada | ☐ No hecho |
-| M7.3 | Base de integración con Testcontainers | Must | PostgreSQL efímero; la base de desarrollo no se toca | ☐ No hecho |
-| M7.4 | Integración de registro, login y roles | Must | 201/409/401/403; escalada de privilegios cubierta | ☐ No hecho |
-| M7.5 | Integración de catálogo y productos | Must | Solo activos en el público; 403 en administración | ☐ No hecho |
-| M7.6 | Integración de pedidos y stock | Must | 409 por stock insuficiente; stock descontado una sola vez | ☐ No hecho |
-| M7.7 | Integración de ubicación y notificación | Must | Ubicación aislada por cliente; enlace correcto y sin fugas | ☐ No hecho |
-| M7.8 | Pruebas del aplicativo móvil | Should | Validaciones, formato de moneda y carrito cubiertos | ☐ No hecho |
-| M7.9 | Reporte de cobertura | Should | Reporte adjunto al repositorio y revisado | ☐ No hecho |
+| M7.1 | Pruebas del formateador de WhatsApp | Must | Casos con acentos, saltos de línea y total | ☑ Hecho |
+| M7.2 | Pruebas de horario, totales y estados | Must | Bordes exactos del horario; transición inválida detectada | ☑ Hecho |
+| M7.3 | Base de integración con Testcontainers | Must | PostgreSQL efímero; la base de desarrollo no se toca | ☑ Hecho |
+| M7.4 | Integración de registro, login y roles | Must | 201/409/401/403; escalada de privilegios cubierta | ☑ Hecho |
+| M7.5 | Integración de catálogo y productos | Must | Solo activos en el público; 403 en administración | ☑ Hecho |
+| M7.6 | Integración de pedidos y stock | Must | 409 por stock insuficiente; stock descontado una sola vez | ☑ Hecho |
+| M7.7 | Integración de ubicación y notificación | Must | Ubicación aislada por cliente; enlace correcto y sin fugas | ☑ Hecho |
+| M7.8 | Pruebas del aplicativo móvil | Should | Validaciones, formato de moneda y carrito cubiertos | ☑ Hecho |
+| M7.9 | Reporte de cobertura | Should | Reporte adjunto al repositorio y revisado | ☑ Hecho |
 
-**Done:** `./gradlew test` en verde; cada RF tiene al menos una prueba que lo evidencia; ningún test depende del orden de ejecución.
+**Done:** `./gradlew test` en verde; cada RF tiene al menos una prueba que lo evidencia; ningún test depende del orden de ejecución. Evidencia: `docs/reporte-cobertura.md`.
 
 ## Módulo 8 — Documentación
 
