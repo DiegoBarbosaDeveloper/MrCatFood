@@ -51,4 +51,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
             """)
     int descontarStockSiDisponible(
             @Param("productoId") Long productoId, @Param("cantidad") Integer cantidad);
+
+    @Modifying(flushAutomatically = true)
+    @Query(
+            """
+            UPDATE Producto producto
+            SET producto.stock = producto.stock + :cantidad,
+                producto.version = producto.version + 1
+            WHERE producto.id = :productoId
+            """)
+    int devolverStock(@Param("productoId") Long productoId, @Param("cantidad") Integer cantidad);
 }

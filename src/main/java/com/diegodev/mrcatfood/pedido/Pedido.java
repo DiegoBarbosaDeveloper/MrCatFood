@@ -107,4 +107,8 @@ public class Pedido {
             Producto producto, String nombreProducto, BigDecimal precioUnitario, Integer cantidad) {
         detalles.add(new DetallePedido(this, producto, nombreProducto, precioUnitario, cantidad));
     }
+
+    public void cambiarEstado(EstadoPedido nuevoEstado) {
+        this.estado = nuevoEstado;
+    }
 }
