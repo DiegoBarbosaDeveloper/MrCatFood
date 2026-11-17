@@ -1,0 +1,238 @@
+### MrCatFood — flujo completo
+### Selecciona el entorno "local" y ejecuta las peticiones en orden.
+
+### 1. Consultar la configuración horaria pública
+GET {{baseUrl}}/api/configuracion/horario
+Accept: application/json
+
+> {%
+    client.test("El horario es público", function () {
+        client.assert(response.status === 200, "Se esperaba HTTP 200");
+        client.assert(response.body.zona !== undefined, "La respuesta debe incluir la zona");
+    });
+%}
+
+### 2. Registrar un cliente único y conservar su JWT
+< {%
+    client.global.set("clienteEmail", "cliente." + Date.now() + "@example.com");
+%}
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nombre": "Cliente Colección HTTP",
+  "email": "{{clienteEmail}}",
+  "telefono": "3001234567",
+  "password": "clave1234"
+}
+
+> {%
+    client.test("El registro devuelve un token", function () {
+        client.assert(response.status === 201, "Se esperaba HTTP 201");
+        client.assert(response.body.token, "La respuesta debe incluir el token");
+    });
+    client.global.set("tokenCliente", response.body.token);
+%}
+
+### 3. Consultar al usuario del token
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer {{tokenCliente}}
+Accept: application/json
+
+> {%
+    client.test("El token pertenece al cliente registrado", function () {
+        client.assert(response.status === 200, "Se esperaba HTTP 200");
+        client.assert(response.body.email === client.global.get("clienteEmail"), "Correo inesperado");
+    });
+%}
+
+### 4. Guardar la ubicación del cliente
+PUT {{baseUrl}}/api/usuarios/yo/ubicacion
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "conjuntoResidencial": "Conjunto Los Gatos",
+  "apartamento": "Torre 2 - 304"
+}
+
+> {%
+    client.test("La ubicación queda guardada", function () {
+        client.assert(response.status === 200, "Se esperaba HTTP 200");
+        client.assert(response.body.apartamento === "Torre 2 - 304", "Apartamento inesperado");
+    });
+%}
+
+### 5. Consultar el catálogo y conservar un producto disponible
+GET {{baseUrl}}/api/productos
+Accept: application/json
+
+> {%
+    const producto = response.body.find(function (candidato) {
+        return candidato.disponible === true && candidato.stock > 0;
+    });
+    client.test("Existe un producto disponible", function () {
+        client.assert(response.status === 200, "Se esperaba HTTP 200");
+        client.assert(producto !== undefined, "No hay productos con stock en el catálogo");
+    });
+    if (producto) {
+        client.global.set("productoId", producto.id);
+    }
+%}
+
+### 6. Consultar el detalle del producto elegido
+GET {{baseUrl}}/api/productos/{{productoId}}
+Accept: application/json
+
+### 7. Previsualizar el pedido sin persistirlo
+< {%
+    const entrega = new Date();
+    entrega.setDate(entrega.getDate() + 1);
+    const ano = entrega.getFullYear();
+    const mes = String(entrega.getMonth() + 1).padStart(2, "0");
+    const dia = String(entrega.getDate()).padStart(2, "0");
+    client.global.set("fechaEntrega", ano + "-" + mes + "-" + dia);
+%}
+POST {{baseUrl}}/api/pedidos/preview
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "productos": [
+    {
+      "productoId": {{productoId}},
+      "cantidad": 1
+    }
+  ],
+  "fechaEntrega": "{{fechaEntrega}}",
+  "horaEntrega": "12:00",
+  "notas": "Pedido generado desde la colección HTTP"
+}
+
+> {%
+    client.test("La previsualización calcula el total", function () {
+        client.assert(response.status === 200, "Se esperaba HTTP 200");
+        client.assert(Number(response.body.total) >= 0, "El total debe ser válido");
+    });
+%}
+
+### 8. Confirmar y registrar el pedido
+POST {{baseUrl}}/api/pedidos
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "productos": [
+    {
+      "productoId": {{productoId}},
+      "cantidad": 1
+    }
+  ],
+  "fechaEntrega": "{{fechaEntrega}}",
+  "horaEntrega": "12:00",
+  "notas": "Pedido generado desde la colección HTTP"
+}
+
+> {%
+    client.test("El pedido queda registrado", function () {
+        client.assert(response.status === 201, "Se esperaba HTTP 201");
+        client.assert(response.body.id, "La respuesta debe incluir el id");
+    });
+    client.global.set("pedidoId", response.body.id);
+%}
+
+### 9. Consultar los pedidos del cliente
+GET {{baseUrl}}/api/pedidos/mios
+Authorization: Bearer {{tokenCliente}}
+Accept: application/json
+
+### 10. Consultar el detalle del pedido creado
+GET {{baseUrl}}/api/pedidos/{{pedidoId}}
+Authorization: Bearer {{tokenCliente}}
+Accept: application/json
+
+### 11. Generar el enlace de WhatsApp
+POST {{baseUrl}}/api/pedidos/{{pedidoId}}/whatsapp
+Authorization: Bearer {{tokenCliente}}
+Accept: application/json
+
+> {%
+    client.test("Se genera un enlace wa.me", function () {
+        client.assert(response.status === 200, "Se esperaba HTTP 200");
+        client.assert(response.body.enlace.startsWith("https://wa.me/"), "Enlace inesperado");
+    });
+%}
+
+### 12. Cerrar la sesión del cliente
+POST {{baseUrl}}/api/auth/logout
+Authorization: Bearer {{tokenCliente}}
+
+> {%
+    client.test("El cierre de sesión no devuelve contenido", function () {
+        client.assert(response.status === 204, "Se esperaba HTTP 204");
+    });
+%}
+
+### 13. Comprobar que el token revocado ya no funciona
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer {{tokenCliente}}
+Accept: application/problem+json
+
+> {%
+    client.test("El token revocado es rechazado", function () {
+        client.assert(response.status === 401, "Se esperaba HTTP 401");
+    });
+%}
+
+### 14. Iniciar sesión como administrador
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+> {%
+    client.test("El administrador inicia sesión", function () {
+        client.assert(response.status === 200, "Revisa las credenciales del entorno privado");
+    });
+    client.global.set("tokenAdmin", response.body.token);
+%}
+
+### 15. Consultar el catálogo administrativo
+GET {{baseUrl}}/api/admin/productos
+Authorization: Bearer {{tokenAdmin}}
+Accept: application/json
+
+### 16. Consultar todos los pedidos como administrador
+GET {{baseUrl}}/api/admin/pedidos?pagina=0&tamano=20
+Authorization: Bearer {{tokenAdmin}}
+Accept: application/json
+
+### 17. Consultar el detalle administrativo del pedido creado
+GET {{baseUrl}}/api/admin/pedidos/{{pedidoId}}
+Authorization: Bearer {{tokenAdmin}}
+Accept: application/json
+
+### 18. Confirmar el pedido
+PATCH {{baseUrl}}/api/admin/pedidos/{{pedidoId}}/estado
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estado": "CONFIRMADO"
+}
+
+> {%
+    client.test("El pedido avanza a CONFIRMADO", function () {
+        client.assert(response.status === 200, "Se esperaba HTTP 200");
+        client.assert(response.body.estado === "CONFIRMADO", "Estado inesperado");
+    });
+%}

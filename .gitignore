@@ -41,3 +41,6 @@ out/
 .env.*
 !.env.example
 !.env.produccion.example
+
+### HTTP Client ###
+http-client.private.env.json
