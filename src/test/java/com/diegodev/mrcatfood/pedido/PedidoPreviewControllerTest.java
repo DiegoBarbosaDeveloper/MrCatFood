@@ -93,6 +93,38 @@ class PedidoPreviewControllerTest {
     }
 
     @Test
+    void calculaLosCentavosConRedondeoHalfUp() throws Exception {
+        Usuario cliente = crearClienteConUbicacion();
+        Producto producto =
+                productos.saveAndFlush(
+                        new Producto(
+                                "Sándwich especial",
+                                "Con queso",
+                                new BigDecimal("12345.67"),
+                                10,
+                                true));
+
+        mvc.perform(
+                        post("/api/pedidos/preview")
+                                .header("Authorization", "Bearer " + tokenDe(cliente))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(
+                                        """
+                                        {
+                                          "productos": [{"productoId": %d, "cantidad": 2}],
+                                          "fechaEntrega": "2099-11-17",
+                                          "horaEntrega": "12:30"
+                                        }
+                                        """
+                                                .formatted(producto.getId())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.detalles[0].precioUnitario").value(12345.67))
+                .andExpect(jsonPath("$.detalles[0].subtotal").value(24691.34))
+                .andExpect(jsonPath("$.subtotal").value(24691.34))
+                .andExpect(jsonPath("$.total").value(24691.34));
+    }
+
+    @Test
     void productoInactivoNoPuedePrevisualizarse() throws Exception {
         Usuario cliente = crearClienteConUbicacion();
         Producto inactivo =

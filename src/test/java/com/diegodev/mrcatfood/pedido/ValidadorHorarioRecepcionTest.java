@@ -8,6 +8,7 @@ import com.diegodev.mrcatfood.comun.ApiException;
 import com.diegodev.mrcatfood.comun.CodigoError;
 import com.diegodev.mrcatfood.config.PropiedadesPedido;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -55,6 +56,28 @@ class ValidadorHorarioRecepcionTest {
                         excepcion ->
                                 assertThat(excepcion.codigo())
                                         .isEqualTo(CodigoError.FUERA_DE_HORARIO));
+    }
+
+    @Test
+    void interpretaLaHoraConLaZonaDelReloj() {
+        ZonaDePrueba zonaMexico = new ZonaDePrueba(LocalTime.of(7, 30));
+        Clock relojEnOtroHuso = Clock.fixed(zonaMexico.instant(), ZoneId.of("America/Mexico_City"));
+
+        assertThatThrownBy(
+                        () ->
+                                new ValidadorHorarioRecepcion(relojEnOtroHuso, PROPIEDADES)
+                                        .validarHorarioRecepcion())
+                .isInstanceOfSatisfying(
+                        ApiException.class,
+                        excepcion ->
+                                assertThat(excepcion.codigo())
+                                        .isEqualTo(CodigoError.FUERA_DE_HORARIO));
+    }
+
+    private record ZonaDePrueba(Instant instant) {
+        ZonaDePrueba(LocalTime hora) {
+            this(ZonedDateTime.of(FECHA, hora, ZoneId.of("America/Mexico_City")).toInstant());
+        }
     }
 
     private ValidadorHorarioRecepcion validadorA(LocalTime hora) {
