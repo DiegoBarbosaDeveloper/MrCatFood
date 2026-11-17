@@ -27,6 +27,9 @@ seguridad:
     secreto: ${JWT_SECRETO}
     expiracion-minutos: ${JWT_EXPIRACION_MINUTOS:120}
 
+whatsapp:
+  numero: ${WHATSAPP_NUMERO}
+
 pedidos:
   horario-inicio: ${PEDIDOS_HORARIO_INICIO:08:00}
   horario-fin: ${PEDIDOS_HORARIO_FIN:20:00}
