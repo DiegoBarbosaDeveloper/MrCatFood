@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -10,15 +11,22 @@ import {
 } from "react-native";
 import { productosApi } from "../../src/api/productosApi";
 import { useSesion } from "../../src/funcionalidades/sesion/contextoSesion";
+import { useCarrito } from "../../src/funcionalidades/carrito/tiendaCarrito";
 import type { ProductoResponse } from "../../src/tipos/producto";
 import { formatearPrecio } from "../../src/utilidades/formatearPrecio";
 
 export default function Catalogo() {
   const { usuario, cerrarSesion } = useSesion();
+  const agregarProducto = useCarrito((estado) => estado.agregarProducto);
+  const sincronizarCatalogo = useCarrito((estado) => estado.sincronizarCatalogo);
   const catalogo = useQuery({
     queryKey: ["productos", "catalogo"],
     queryFn: productosApi.listar,
   });
+
+  useEffect(() => {
+    if (catalogo.data) sincronizarCatalogo(catalogo.data);
+  }, [catalogo.data, sincronizarCatalogo]);
 
   if (catalogo.isPending) {
     return (
@@ -89,39 +97,55 @@ export default function Catalogo() {
         </View>
       }
       renderItem={({ item }) => (
-        <Pressable
-          accessibilityHint="Abre el detalle del producto"
-          accessibilityLabel={`${item.nombre}, ${formatearPrecio(item.precio)}, ${
-            item.disponible ? "disponible" : "agotado"
-          }`}
-          accessibilityRole="button"
-          onPress={() => abrirDetalle(item)}
-          style={({ pressed }) => [estilos.tarjeta, pressed ? estilos.tarjetaPresionada : null]}
-        >
-          <View style={estilos.filaTarjeta}>
-            <Text style={estilos.nombreProducto}>{item.nombre}</Text>
-            <View style={[estilos.badge, item.disponible ? estilos.disponible : estilos.agotado]}>
-              <Text
-                style={[
-                  estilos.textoBadge,
-                  item.disponible ? estilos.textoDisponible : estilos.textoAgotado,
-                ]}
-              >
-                {item.disponible ? "Disponible" : "Agotado"}
-              </Text>
+        <View style={estilos.tarjeta}>
+          <Pressable
+            accessibilityHint="Abre el detalle del producto"
+            accessibilityLabel={`${item.nombre}, ${formatearPrecio(item.precio)}, ${
+              item.disponible ? "disponible" : "agotado"
+            }`}
+            accessibilityRole="button"
+            onPress={() => abrirDetalle(item)}
+            style={({ pressed }) => [
+              estilos.contenidoTarjeta,
+              pressed ? estilos.tarjetaPresionada : null,
+            ]}
+          >
+            <View style={estilos.filaTarjeta}>
+              <Text style={estilos.nombreProducto}>{item.nombre}</Text>
+              <View style={[estilos.badge, item.disponible ? estilos.disponible : estilos.agotado]}>
+                <Text
+                  style={[
+                    estilos.textoBadge,
+                    item.disponible ? estilos.textoDisponible : estilos.textoAgotado,
+                  ]}
+                >
+                  {item.disponible ? "Disponible" : "Agotado"}
+                </Text>
+              </View>
             </View>
-          </View>
-          <Text numberOfLines={2} style={estilos.descripcionProducto}>
-            {item.descripcion}
-          </Text>
-          <Text numberOfLines={2} style={estilos.ingredientes}>
-            {item.ingredientes.join(" · ")}
-          </Text>
-          <View style={estilos.filaTarjeta}>
-            <Text style={estilos.precio}>{formatearPrecio(item.precio)}</Text>
-            <Text style={estilos.stock}>Disponibles: {item.stock}</Text>
-          </View>
-        </Pressable>
+            <Text numberOfLines={2} style={estilos.descripcionProducto}>
+              {item.descripcion}
+            </Text>
+            <Text numberOfLines={2} style={estilos.ingredientes}>
+              {item.ingredientes.join(" · ")}
+            </Text>
+            <View style={estilos.filaTarjeta}>
+              <Text style={estilos.precio}>{formatearPrecio(item.precio)}</Text>
+              <Text style={estilos.stock}>Disponibles: {item.stock}</Text>
+            </View>
+          </Pressable>
+          <Pressable
+            accessibilityLabel={`Agregar ${item.nombre} al carrito`}
+            accessibilityRole="button"
+            disabled={!item.disponible}
+            onPress={() => agregarProducto(item)}
+            style={[estilos.botonAgregar, !item.disponible ? estilos.deshabilitado : null]}
+          >
+            <Text style={estilos.textoBotonPrincipal}>
+              {item.disponible ? "Agregar al carrito" : "Producto agotado"}
+            </Text>
+          </Pressable>
+        </View>
       )}
     />
   );
@@ -162,10 +186,10 @@ const estilos = StyleSheet.create({
     borderColor: "#d1d5db",
     borderRadius: 12,
     borderWidth: 1,
-    gap: 10,
-    minHeight: 160,
+    gap: 12,
     padding: 16,
   },
+  contenidoTarjeta: { gap: 10 },
   tarjetaPresionada: {
     opacity: 0.75,
   },
@@ -250,6 +274,15 @@ const estilos = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
   },
+  botonAgregar: {
+    alignItems: "center",
+    backgroundColor: "#0a7ea4",
+    borderRadius: 8,
+    justifyContent: "center",
+    minHeight: 44,
+    paddingHorizontal: 14,
+  },
+  deshabilitado: { opacity: 0.45 },
   botonSecundario: {
     alignItems: "center",
     borderColor: "#9ca3af",

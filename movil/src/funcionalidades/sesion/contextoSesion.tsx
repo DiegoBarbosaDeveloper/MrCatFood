@@ -9,6 +9,7 @@ import React, {
 import { almacenToken } from "./almacenToken";
 import { autenticacionApi } from "../../api/autenticacionApi";
 import type { UsuarioResponse } from "../../tipos/autenticacion";
+import { useCarrito } from "../carrito/tiendaCarrito";
 
 interface Sesion {
   usuario: UsuarioResponse | null;
@@ -76,6 +77,7 @@ export function ProveedorSesion({ children }: { children: React.ReactNode }) {
       // aunque falle, limpiamos localmente
     }
     await almacenToken.borrar();
+    useCarrito.getState().vaciarCarrito();
     setToken(null);
     setUsuario(null);
   }, []);

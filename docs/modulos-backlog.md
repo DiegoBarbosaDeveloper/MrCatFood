@@ -22,11 +22,11 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M2 | Registro de clientes | RF-01, RNF-01 | 10 | 0/10 | ◐ En proceso |
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 3/3 | ☑ Hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 7/7 | ☑ Hecho |
-| M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 7/11 | ◐ En proceso |
+| M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 8/11 | ◐ En proceso |
 | M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **23/57 (40 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **24/57 (42 %)** | ◐ En proceso |
 
 **Cerrado en este ciclo:** M1.1, M1.2 y M1.3 fusionadas en `main` · M1.4, M1.5 y M1.6 con PR abierto hacia `dev`.
 
@@ -327,7 +327,7 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 | M5.5 | Consulta de pedidos del cliente | Must | `GET /api/pedidos/mios`; un pedido ajeno → 404 | ☑ Hecho |
 | M5.6 | Listado global con filtros (admin) | Must | Filtros por estado y rango de fechas, paginado | ☑ Hecho |
 | M5.7 | Cambio de estado con máquina de estados | Must | Transición válida → 200; inválida → 422; cancelar devuelve el stock | ☑ Hecho |
-| M5.8 | Carrito (móvil) | Must | Cantidades editables y subtotal correcto | ☐ No hecho |
+| M5.8 | Carrito (móvil) | Must | Cantidades editables y subtotal correcto | ☑ Hecho |
 | M5.9 | Pantallas de entrega y confirmación (móvil) | Must | Fecha, hora y notas; el resumen muestra todo antes de confirmar | ☐ No hecho |
 | M5.10 | Pantallas de consulta de pedidos (móvil) | Must | El cliente ve sus pedidos y el estado actual | ☐ No hecho |
 | M5.11 | Pantallas admin de pedidos (móvil) | Must | La administradora filtra, abre y cambia el estado de un pedido | ☐ No hecho |

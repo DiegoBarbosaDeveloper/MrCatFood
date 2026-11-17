@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -10,11 +11,18 @@ import {
 } from "react-native";
 import { ErrorHttp } from "../../src/api/clienteHttp";
 import { productosApi } from "../../src/api/productosApi";
+import { useCarrito } from "../../src/funcionalidades/carrito/tiendaCarrito";
 import { formatearPrecio } from "../../src/utilidades/formatearPrecio";
 
 export default function DetalleProducto() {
+  const [cantidad, setCantidad] = useState(1);
+  const [agregado, setAgregado] = useState(false);
+  const agregarProducto = useCarrito((estado) => estado.agregarProducto);
   const parametros = useLocalSearchParams<{ productoId?: string }>();
   const productoId = Number(parametros.productoId);
+  const cantidadActualEnCarrito = useCarrito(
+    (estado) => estado.items.find((item) => item.productoId === productoId)?.cantidad ?? 0,
+  );
   const identificadorValido = Number.isInteger(productoId) && productoId > 0;
   const detalle = useQuery({
     queryKey: ["productos", "detalle", productoId],
@@ -89,6 +97,71 @@ export default function DetalleProducto() {
         <Text style={estilos.subtitulo}>Cantidad disponible</Text>
         <Text style={estilos.cantidad}>{producto.stock}</Text>
       </View>
+
+      {producto.disponible ? (
+        <View style={estilos.seccionCarrito}>
+          <View style={estilos.filaCantidad}>
+            <Text style={estilos.subtitulo}>Cantidad</Text>
+            <View style={estilos.controlesCantidad}>
+              <Pressable
+                accessibilityLabel="Disminuir cantidad"
+                accessibilityRole="button"
+                disabled={cantidad <= 1}
+                onPress={() => setCantidad((valor) => Math.max(1, valor - 1))}
+                style={[estilos.botonCantidad, cantidad <= 1 ? estilos.deshabilitado : null]}
+              >
+                <Text style={estilos.textoCantidad}>−</Text>
+              </Pressable>
+              <Text accessibilityLiveRegion="polite" style={estilos.numeroCantidad}>
+                {cantidad}
+              </Text>
+              <Pressable
+                accessibilityLabel="Aumentar cantidad"
+                accessibilityRole="button"
+                disabled={cantidad + cantidadActualEnCarrito >= producto.stock}
+                onPress={() =>
+                  setCantidad((valor) =>
+                    Math.min(producto.stock - cantidadActualEnCarrito, valor + 1),
+                  )
+                }
+                style={[
+                  estilos.botonCantidad,
+                  cantidad + cantidadActualEnCarrito >= producto.stock
+                    ? estilos.deshabilitado
+                    : null,
+                ]}
+              >
+                <Text style={estilos.textoCantidad}>+</Text>
+              </Pressable>
+            </View>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            disabled={cantidadActualEnCarrito >= producto.stock}
+            onPress={() => {
+              agregarProducto(producto, cantidad);
+              setAgregado(true);
+              setCantidad(1);
+            }}
+            style={[
+              estilos.boton,
+              cantidadActualEnCarrito >= producto.stock ? estilos.deshabilitado : null,
+            ]}
+          >
+            <Text style={estilos.textoBoton}>Agregar al carrito</Text>
+          </Pressable>
+          {cantidadActualEnCarrito > 0 ? (
+            <Text style={estilos.enCarrito}>En el carrito: {cantidadActualEnCarrito}</Text>
+          ) : null}
+          {agregado ? (
+            <Pressable accessibilityRole="button" onPress={() => router.push("/(cliente)/carrito")}>
+              <Text accessibilityLiveRegion="polite" style={estilos.enlaceCarrito}>
+                Producto agregado. Ver carrito
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
 
       {!producto.disponible ? (
         <Text accessibilityLiveRegion="polite" style={estilos.aviso}>
@@ -171,6 +244,27 @@ const estilos = StyleSheet.create({
     color: "#991b1b",
     fontWeight: "600",
   },
+  seccionCarrito: { gap: 12 },
+  filaCantidad: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  controlesCantidad: { alignItems: "center", flexDirection: "row", gap: 10 },
+  botonCantidad: {
+    alignItems: "center",
+    borderColor: "#9ca3af",
+    borderRadius: 8,
+    borderWidth: 1,
+    height: 44,
+    justifyContent: "center",
+    width: 44,
+  },
+  textoCantidad: { fontSize: 22, fontWeight: "700" },
+  numeroCantidad: { fontSize: 18, fontWeight: "700", minWidth: 28, textAlign: "center" },
+  deshabilitado: { opacity: 0.4 },
+  enCarrito: { color: "#4b5563", textAlign: "center" },
+  enlaceCarrito: { color: "#075985", fontWeight: "700", minHeight: 44, textAlign: "center" },
   estado: {
     alignItems: "center",
     flex: 1,
