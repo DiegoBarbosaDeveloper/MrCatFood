@@ -1,5 +1,6 @@
 package com.diegodev.mrcatfood.pedido;
 
+import com.diegodev.mrcatfood.producto.Producto;
 import com.diegodev.mrcatfood.usuario.Usuario;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -76,4 +78,33 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<DetallePedido> detalles = new ArrayList<>();
+
+    public Pedido(
+            String codigoTemporal,
+            Usuario cliente,
+            LocalDate fechaEntrega,
+            LocalTime horaEntrega,
+            String notas,
+            BigDecimal subtotal,
+            BigDecimal total) {
+        this.codigo = codigoTemporal;
+        this.cliente = cliente;
+        this.conjuntoResidencial = cliente.getConjuntoResidencial();
+        this.apartamento = cliente.getApartamento();
+        this.fechaEntrega = fechaEntrega;
+        this.horaEntrega = horaEntrega;
+        this.notas = notas;
+        this.subtotal = subtotal.setScale(2, RoundingMode.HALF_UP);
+        this.total = total.setScale(2, RoundingMode.HALF_UP);
+        this.estado = EstadoPedido.PENDIENTE;
+    }
+
+    public void asignarCodigoDefinitivo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public void agregarDetalle(
+            Producto producto, String nombreProducto, BigDecimal precioUnitario, Integer cantidad) {
+        detalles.add(new DetallePedido(this, producto, nombreProducto, precioUnitario, cantidad));
+    }
 }
