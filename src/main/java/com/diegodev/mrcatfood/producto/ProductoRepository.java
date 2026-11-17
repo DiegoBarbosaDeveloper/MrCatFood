@@ -35,4 +35,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
             WHERE producto.id = :productoId AND producto.activo = true
             """)
     Optional<Producto> buscarActivoPorIdConIngredientes(@Param("productoId") Long productoId);
+
+    List<Producto> findAllByIdInAndActivoTrue(List<Long> productoIds);
 }
