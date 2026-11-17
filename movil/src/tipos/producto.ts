@@ -8,3 +8,16 @@ export interface ProductoResponse {
   activo: boolean;
   disponible: boolean;
 }
+
+export interface ProductoRequest {
+  nombre: string;
+  descripcion: string;
+  ingredientes: string[];
+  precio: number;
+  stock: number;
+}
+
+export interface DisponibilidadRequest {
+  activo: boolean;
+  stock: number;
+}
