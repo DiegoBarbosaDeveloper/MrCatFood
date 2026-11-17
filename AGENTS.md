@@ -111,11 +111,11 @@ esas reglas.
 ## 6. Estado actual
 
 - M1 (análisis) ☑ Hecho.
-- M2 (registro de clientes) ◐ En proceso:
-  - ☑ Hecho: M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.9.
-  - ◐ En proceso: M2.10 (andamiaje móvil y pantallas de acceso).
-  - ☐ No hecho: M2.7, M2.8.
-- M3 a M8: ☐ No hecho.
+- M2 (registro de clientes) ☑ Hecho (10/10).
+- M3 (ubicación) ☑ Hecho (3/3).
+- M4 (catálogo de sándwiches) ☑ Hecho (7/7).
+- M5 (gestión de pedidos) ☑ Hecho (11/11).
+- M6 a M8: ☐ No hecho.
 
 ## 7. Documentación de referencia
 
