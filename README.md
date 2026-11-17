@@ -219,6 +219,10 @@ puedes perder todos los datos locales.
 - [Plan de la aplicación](docs/plan-frontend.md)
 - [Backlog y estado del proyecto](docs/modulos-backlog.md)
 - [Reporte de cobertura](docs/reporte-cobertura.md)
+- [Manual de cliente](docs/manual-cliente.md)
+- [Manual de administradora](docs/manual-administradora.md)
+- [Matriz de trazabilidad](docs/matriz-trazabilidad.md)
+- [Plan de despliegue](docs/despliegue.md)
 
 ## Seguridad
 

@@ -1,0 +1,14 @@
+.git
+.github
+.gradle
+.idea
+.vscode
+build
+docs
+movil
+.env
+.env.*
+!.env.example
+!.env.produccion.example
+*.iml
+*.log
