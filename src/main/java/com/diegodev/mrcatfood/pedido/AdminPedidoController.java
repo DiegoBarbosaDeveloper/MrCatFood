@@ -1,9 +1,13 @@
 package com.diegodev.mrcatfood.pedido;
 
+import com.diegodev.mrcatfood.config.OpenApiConfig;
 import com.diegodev.mrcatfood.pedido.dto.CambiarEstadoRequest;
 import com.diegodev.mrcatfood.pedido.dto.PaginaResponse;
 import com.diegodev.mrcatfood.pedido.dto.PedidoResponse;
 import com.diegodev.mrcatfood.pedido.dto.PedidoResumenResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 /** Consulta administrativa global de pedidos. */
 @RestController
 @RequestMapping("/api/admin/pedidos")
+@Tag(name = "Administración")
+@SecurityRequirement(name = OpenApiConfig.ESQUEMA_BEARER)
 public class AdminPedidoController {
 
     private final PedidoService servicio;
@@ -28,6 +34,9 @@ public class AdminPedidoController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Consultar todos los pedidos",
+            description = "Admite filtros y paginación.")
     public ResponseEntity<PaginaResponse<PedidoResumenResponse>> consultarPedidos(
             @RequestParam(required = false) EstadoPedido estado,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -42,11 +51,13 @@ public class AdminPedidoController {
     }
 
     @GetMapping("/{pedidoId}")
+    @Operation(summary = "Consultar el detalle administrativo de un pedido")
     public ResponseEntity<PedidoResponse> consultarDetalle(@PathVariable Long pedidoId) {
         return ResponseEntity.ok(servicio.consultarPedidoAdministracion(pedidoId));
     }
 
     @PatchMapping("/{pedidoId}/estado")
+    @Operation(summary = "Cambiar el estado de un pedido")
     public ResponseEntity<PedidoResponse> cambiarEstado(
             @PathVariable Long pedidoId, @Valid @RequestBody CambiarEstadoRequest solicitud) {
         return ResponseEntity.ok(servicio.cambiarEstadoPedido(pedidoId, solicitud.estado()));
