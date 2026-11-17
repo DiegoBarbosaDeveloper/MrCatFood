@@ -1,5 +1,6 @@
 plugins {
     java
+    jacoco
     id("com.diffplug.spotless") version "8.10.4"
     id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
@@ -86,3 +87,16 @@ val integracionTest =
         useJUnitPlatform { includeTags("integracion") }
         shouldRunAfter(tasks.test)
     }
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test, integracionTest)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+}
