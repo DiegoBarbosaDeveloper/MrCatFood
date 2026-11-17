@@ -26,3 +26,10 @@ seguridad:
   jwt:
     secreto: ${JWT_SECRETO}
     expiracion-minutos: ${JWT_EXPIRACION_MINUTOS:120}
+
+pedidos:
+  horario-inicio: ${PEDIDOS_HORARIO_INICIO:08:00}
+  horario-fin: ${PEDIDOS_HORARIO_FIN:20:00}
+  entrega-inicio: ${PEDIDOS_ENTREGA_INICIO:11:00}
+  entrega-fin: ${PEDIDOS_ENTREGA_FIN:21:00}
+  zona: ${PEDIDOS_ZONA:America/Bogota}
