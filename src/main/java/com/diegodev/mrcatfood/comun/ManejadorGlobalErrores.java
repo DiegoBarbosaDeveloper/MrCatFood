@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -63,6 +64,20 @@ public class ManejadorGlobalErrores {
         ProblemDetail problema =
                 ProblemDetail.forStatusAndDetail(
                         HttpStatus.BAD_REQUEST, "El cuerpo de la petición no es válido");
+        problema.setType(URI.create("about:blank"));
+        problema.setTitle(CodigoError.DATOS_INVALIDOS.titulo());
+        problema.setInstance(URI.create(peticion.getRequestURI()));
+        problema.setProperty("codigo", CodigoError.DATOS_INVALIDOS.codigo());
+        return ResponseEntity.badRequest().body(problema);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ProblemDetail> manejarParametroInvalido(
+            MethodArgumentTypeMismatchException excepcion, HttpServletRequest peticion) {
+        ProblemDetail problema =
+                ProblemDetail.forStatusAndDetail(
+                        HttpStatus.BAD_REQUEST,
+                        "El parámetro '" + excepcion.getName() + "' no tiene un valor válido");
         problema.setType(URI.create("about:blank"));
         problema.setTitle(CodigoError.DATOS_INVALIDOS.titulo());
         problema.setInstance(URI.create(peticion.getRequestURI()));
