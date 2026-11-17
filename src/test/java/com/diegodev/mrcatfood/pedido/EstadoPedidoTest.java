@@ -20,4 +20,21 @@ class EstadoPedidoTest {
         assertThat(EstadoPedido.ENTREGADO.permiteTransicionA(EstadoPedido.CANCELADO)).isFalse();
         assertThat(EstadoPedido.CANCELADO.permiteTransicionA(EstadoPedido.PENDIENTE)).isFalse();
     }
+
+    @Test
+    void rechazaCualquierTransicionHaciaAtras() {
+        assertThat(EstadoPedido.CONFIRMADO.permiteTransicionA(EstadoPedido.PENDIENTE)).isFalse();
+        assertThat(EstadoPedido.EN_PREPARACION.permiteTransicionA(EstadoPedido.CONFIRMADO))
+                .isFalse();
+        assertThat(EstadoPedido.ENTREGADO.permiteTransicionA(EstadoPedido.EN_PREPARACION))
+                .isFalse();
+        assertThat(EstadoPedido.CANCELADO.permiteTransicionA(EstadoPedido.ENTREGADO)).isFalse();
+    }
+
+    @Test
+    void rechazaLasTransicionesAUnMismoEstado() {
+        for (EstadoPedido estado : EstadoPedido.values()) {
+            assertThat(estado.permiteTransicionA(estado)).isFalse();
+        }
+    }
 }
