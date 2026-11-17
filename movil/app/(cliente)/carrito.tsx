@@ -92,11 +92,20 @@ export default function Carrito() {
       keyExtractor={(item) => item.productoId.toString()}
       ListHeaderComponent={<Text style={estilos.titulo}>Tu carrito</Text>}
       ListFooterComponent={
-        <View style={estilos.resumen}>
-          <Text style={estilos.etiquetaTotal}>Subtotal</Text>
-          <Text accessibilityLiveRegion="polite" style={estilos.total}>
-            {formatearPrecio(subtotal)}
-          </Text>
+        <View style={estilos.pie}>
+          <View style={estilos.resumen}>
+            <Text style={estilos.etiquetaTotal}>Subtotal</Text>
+            <Text accessibilityLiveRegion="polite" style={estilos.total}>
+              {formatearPrecio(subtotal)}
+            </Text>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push("/(cliente)/entrega")}
+            style={estilos.botonPrincipal}
+          >
+            <Text style={estilos.textoBotonPrincipal}>Continuar con la entrega</Text>
+          </Pressable>
         </View>
       }
       renderItem={({ item }) => renderizarItem(item)}
@@ -152,9 +161,9 @@ const estilos = StyleSheet.create({
     borderRadius: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 8,
     padding: 18,
   },
+  pie: { gap: 14, marginTop: 8 },
   etiquetaTotal: { fontSize: 18, fontWeight: "700" },
   total: { color: "#075985", fontSize: 23, fontWeight: "700" },
   vacio: {
