@@ -18,4 +18,7 @@ export const pedidosApi = {
       method: "POST",
       body: JSON.stringify(solicitud),
     }),
+  listarMios: () => clienteHttp<PedidoResponse[]>("/api/pedidos/mios"),
+  consultar: (pedidoId: number) =>
+    clienteHttp<PedidoResponse>(`/api/pedidos/${pedidoId}`),
 };
