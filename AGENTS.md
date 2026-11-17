@@ -115,7 +115,8 @@ esas reglas.
 - M3 (ubicación) ☑ Hecho (3/3).
 - M4 (catálogo de sándwiches) ☑ Hecho (7/7).
 - M5 (gestión de pedidos) ☑ Hecho (11/11).
-- M6 a M8: ☐ No hecho.
+- M6 (notificación mediante WhatsApp) ☑ Hecho (5/5).
+- M7 y M8: ☐ No hecho.
 
 ## 7. Documentación de referencia
 

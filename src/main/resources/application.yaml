@@ -30,6 +30,10 @@ seguridad:
 whatsapp:
   numero: ${WHATSAPP_NUMERO}
 
+cors:
+  # Lista separada por comas; en producción se reemplaza con el dominio real.
+  origenes-permitidos: ${CORS_ORIGENES_PERMITIDOS:http://localhost:8081}
+
 pedidos:
   horario-inicio: ${PEDIDOS_HORARIO_INICIO:08:00}
   horario-fin: ${PEDIDOS_HORARIO_FIN:20:00}

@@ -86,3 +86,7 @@ export interface FiltrosPedidosAdmin {
   pagina: number;
   tamano?: number;
 }
+
+export interface EnlaceWhatsAppResponse {
+  enlace: string;
+}

@@ -23,14 +23,14 @@ Tablero oficial del avance. Cada tarea y cada módulo se marcan **Hecho**, **En 
 | M3 | Ubicación: conjunto y apartamento | RF-02 | 3 | 3/3 | ☑ Hecho |
 | M4 | Catálogo de sándwiches | RF-03, RF-04, RF-05 | 7 | 7/7 | ☑ Hecho |
 | M5 | Gestión de pedidos | RF-06, RF-07, RF-08, RF-10, RNF-03, RNF-04 | 11 | 11/11 | ☑ Hecho |
-| M6 | Notificación mediante WhatsApp | RF-09 | 5 | 0/5 | ☐ No hecho |
+| M6 | Notificación mediante WhatsApp | RF-09 | 5 | 5/5 | ☑ Hecho |
 | M7 | Pruebas | Transversal | 9 | 0/9 | ☐ No hecho |
 | M8 | Documentación | Transversal | 6 | 0/6 | ☐ No hecho |
-| | **Total del proyecto** | | **57** | **37/57 (65 %)** | ◐ En proceso |
+| | **Total del proyecto** | | **57** | **42/57 (74 %)** | ◐ En proceso |
 
-**Cerrado en este ciclo:** M1 a M5 fusionados en `dev`. M2 quedó cerrado con sus 10 tareas fusionadas mediante los PR #11 a #16; `./gradlew build` en verde (Spotless + pruebas).
+**Cerrado en este ciclo:** M1 a M5 fusionados en `dev`. M2 quedó cerrado con sus 10 tareas fusionadas mediante los PR #11 a #16; `./gradlew build` en verde (Spotless + pruebas). M6 implementado en las ramas `M6.1`–`M6.5` con `./gradlew build` (115 pruebas) y lint/typecheck móvil en verde.
 
-**En proceso ahora:** ninguno. El siguiente módulo es M6 (notificación mediante WhatsApp).
+**En proceso ahora:** ninguno. El siguiente módulo es M7 (pruebas).
 
 **Reglas del tablero**
 
@@ -336,15 +336,15 @@ La **rama** de cada tarea lleva su mismo identificador, por eso no se repite una
 
 ## Módulo 6 — Notificación mediante WhatsApp
 
-**Estado:** ☐ No hecho · **Requisitos:** RF-09 · **Depende de:** M5
+**Estado:** ☑ Hecho · **Requisitos:** RF-09 · **Depende de:** M5
 
 | # | Tarea | Prioridad | Resultado verificable | Estado |
 |---|---|---|---|---|
-| M6.1 | Configuración del número de la propietaria | Must | Número configurable por variable de entorno, no en el código | ☐ No hecho |
-| M6.2 | Formateador del mensaje | Must | Mensaje con código, cliente, ubicación, fecha/hora, ítems y total | ☐ No hecho |
-| M6.3 | Generación del enlace `wa.me` | Must | URL válida con acentos, espacios y saltos de línea codificados | ☐ No hecho |
-| M6.4 | Endpoint del enlace | Must | `POST /api/pedidos/{id}/whatsapp`; pedido ajeno → 404 | ☐ No hecho |
-| M6.5 | Botón de envío en la app (móvil) | Must | Abre WhatsApp con el mensaje listo; fallback si no hay app instalada | ☐ No hecho |
+| M6.1 | Configuración del número de la propietaria | Must | Número configurable por variable de entorno, no en el código | ☑ Hecho |
+| M6.2 | Formateador del mensaje | Must | Mensaje con código, cliente, ubicación, fecha/hora, ítems y total | ☑ Hecho |
+| M6.3 | Generación del enlace `wa.me` | Must | URL válida con acentos, espacios y saltos de línea codificados | ☑ Hecho |
+| M6.4 | Endpoint del enlace | Must | `POST /api/pedidos/{id}/whatsapp`; pedido ajeno → 404 | ☑ Hecho |
+| M6.5 | Botón de envío en la app (móvil) | Must | Abre WhatsApp con el mensaje listo; fallback si no hay app instalada | ☑ Hecho |
 
 **Done:** el enlace abre el chat correcto con el pedido completo; acentos y saltos de línea se ven bien; funciona en Android, iOS y web.
 
